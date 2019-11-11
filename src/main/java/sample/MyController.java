@@ -103,30 +103,35 @@ public class MyController {
                 x = 0;
                 return;
             }
-            if (y == MAX_V_NUM_GRID - 1){
-                grids[y][x].setText("");
-                x +=2;
+            if (x%2==1){
+                grids[y][x++].setText("");
                 grids[y][x].setText("M");
-                dir = 0;
                 return;
             }
-                
+            if (y == MAX_V_NUM_GRID - 1){
+                grids[y][x++].setText("");
+                grids[y][x].setText("M");
+                dir=0;
+                return;
+            }
             grids[y++][x].setText("");
             grids[y][x].setText("M");
         }
         else{
+            if (x%2==1){
+                grids[y][x++].setText("");
+                grids[y][x].setText("M");
+                return;
+            }
             if (y == 0){
-                grids[y][x].setText("");
-                x +=2;
+                grids[y][x++].setText("");
                 grids[y][x].setText("M");
                 dir = 1;
                 return;
-            }
-                
+            }   
             grids[y--][x].setText("");
             grids[y][x].setText("M");
         }
-        
     }
 
     /**
