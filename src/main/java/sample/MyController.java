@@ -45,10 +45,11 @@ public class MyController {
     private static final int MAX_V_NUM_GRID = 12;
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
-    private int x = -1, y = 0; //where is my monster
+    private int x = -1, y = 0, dir = 1;//where is my monster
     /**
      * A dummy function to show how button click works
      */
+    
     @FXML
     private void play() {
         System.out.println("Play button clicked");
@@ -96,15 +97,36 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if (x == -1) {
-            grids[0][0].setText("M");
-            x = 0;
-            return;
+        if(dir==1){
+            if (x == -1) {
+                grids[0][0].setText("M");
+                x = 0;
+                return;
+            }
+            if (y == MAX_V_NUM_GRID - 1){
+                grids[y][x].setText("");
+                x +=2;
+                grids[y][x].setText("M");
+                dir = 0;
+                return;
+            }
+                
+            grids[y++][x].setText("");
+            grids[y][x].setText("M");
         }
-        if (y == MAX_V_NUM_GRID - 1)
-            return;
-        grids[y++][x].setText("");
-        grids[y][x].setText("M");
+        else{
+            if (y == 0){
+                grids[y][x].setText("");
+                x +=2;
+                grids[y][x].setText("M");
+                dir = 1;
+                return;
+            }
+                
+            grids[y--][x].setText("");
+            grids[y][x].setText("M");
+        }
+        
     }
 
     /**
