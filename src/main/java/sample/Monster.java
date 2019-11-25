@@ -8,17 +8,25 @@ package sample;
         protected int y;
         protected int dir;
         protected int speed;
+        protected int id;
         
         
         Monster(){
+            id = 0;
             x=0;
             y=0;
             dir=1;
             hp=5;   
             speed =1; 
         }
+        public void move(){
+          
+        }
         public int getHP(){
             return this.hp;
+        }
+        public void ReduceHP(){
+            
         }
         public int getSpeed(){
             return this.speed;

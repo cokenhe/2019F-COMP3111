@@ -11,6 +11,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+//import javafx.scene.image.ImageView;
 
 public class MyController {
     @FXML
@@ -42,7 +44,12 @@ public class MyController {
     private static final int GRID_WIDTH = 40;
     private static final int GRID_HEIGHT = 40;
     private static final int MAX_H_NUM_GRID = 12;
+    private static final int MAX_MONSTER_NUMBER = 999;
     private static final int MAX_V_NUM_GRID = 12;
+    private static int number_of_frame = 0;
+    //Image image = new Image(getClass().getResourceAsStream("../../resources/fox.png"));
+    
+    private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0, dir = 1;//where is my monster
@@ -97,41 +104,51 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
+        if(number_of_frame%5==0){
+            generateMonster();
+        }
         if(dir==1){
             if (x == -1) {
-                grids[0][0].setText("M");
+                //grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+                //ImageView fox = new ImageView(new Image("resources/fox.png"));
+                grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
                 x = 0;
-                return;
+                return; 
             }
             if (x%2==1){
-                grids[y][x++].setText("");
-                grids[y][x].setText("M");
+                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
+                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
                 return;
             }
             if (y == MAX_V_NUM_GRID - 1){
-                grids[y][x++].setText("");
-                grids[y][x].setText("M");
+                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
+                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
                 dir=0;
                 return;
             }
-            grids[y++][x].setText("");
-            grids[y][x].setText("M");
+            grids[y++][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
         }
         else{
             if (x%2==1){
-                grids[y][x++].setText("");
-                grids[y][x].setText("M");
+                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
+                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
                 return;
             }
             if (y == 0){
-                grids[y][x++].setText("");
-                grids[y][x].setText("M");
+                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
+                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
                 dir = 1;
                 return;
             }   
-            grids[y--][x].setText("");
-            grids[y][x].setText("M");
+            grids[y--][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
         }
+        ++number_of_frame;
+    }
+    @FXML
+    private void generateMonster(){
+        
     }
 
     /**
