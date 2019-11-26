@@ -120,7 +120,7 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if(number_of_frame % 5 == 0){
+        if(number_of_frame++ % 5 == 0){
             generateMonster();
         }
 
@@ -131,22 +131,17 @@ public class MyController {
             return; 
         }
 
-        // When col is odd, move to right
-        if (x % 2 == 1 || (dir == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && y == 0)){
-            grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
-            grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-
-            dir = (y == 0)                  ? Direction.DOWNWARD : 
-                  (y == MAX_V_NUM_GRID - 1) ? Direction.UPWARD   : dir;
-            return;
-        }
-
-        // Moving up / down
         grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
-        y += dir.getValue();
-        grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
 
-        ++number_of_frame;
+        // When col is odd || moved to top / bottom, then move to right
+        if (x % 2 == 1 || (dir == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && y == 0)){
+            x += 1;
+            if (y == 0)                  dir = Direction.DOWNWARD;
+            if (y == MAX_V_NUM_GRID - 1) dir = Direction.UPWARD;
+        } else // Moving up / down
+            y += dir.getValue();
+
+        grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
     }
 
     @FXML
@@ -187,47 +182,6 @@ public class MyController {
                     event.consume();
                 });
             }
-        
-
-        //well, you can also write anonymous class or even lambda
-        //Anonymous class
-        // target.setOnDragOver(new EventHandler <DragEvent>() {
-        //     public void handle(DragEvent event) {
-        //         /* data is dragged over the target */
-        //         System.out.println("onDragOver");
-
-        //         /* accept it only if it is  not dragged from the same node
-        //          * and if it has a string data */
-        //         if (event.getGestureSource() != target &&
-        //                 event.getDragboard().hasString()) {
-        //             /* allow for both copying and moving, whatever user chooses */
-        //             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        //         }
-
-        //         event.consume();
-        //     }
-        // });
-
-        // target.setOnDragEntered(new EventHandler <DragEvent>() {
-        //     public void handle(DragEvent event) {
-        //         /* the drag-and-drop gesture entered the target */
-        //         System.out.println("onDragEntered");
-        //         /* show to the user that it is an actual gesture target */
-        //         if (event.getGestureSource() != target &&
-        //                 event.getDragboard().hasString()) {
-        //             target.setStyle("-fx-border-color: blue;");
-        //         }
-
-        //         event.consume();
-        //     }
-        // });
-        // //lambda
-        // target.setOnDragExited((event) -> {
-        //         /* mouse moved away, remove the graphical cues */
-        //         target.setStyle("-fx-border-color: black;");
-        //         System.out.println("Exit");
-        //         event.consume();
-        // });
     }
 }
 
