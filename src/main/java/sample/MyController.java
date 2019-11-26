@@ -47,7 +47,7 @@ public class MyController {
     private static final int MAX_MONSTER_NUMBER = 999;
     private static final int MAX_V_NUM_GRID = 12;
     private static int number_of_frame = 0;
-    //Image image = new Image(getClass().getResourceAsStream("../../resources/fox.png"));
+    
     
     private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
 

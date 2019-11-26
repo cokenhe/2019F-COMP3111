@@ -3,9 +3,9 @@ package sample;
 
     public class Unicorn extends Monster {
                 
-        Unicorn(int id){
-            this.id = id;
-            hp = 10;
+        Unicorn(int no_of_frame){
+            hp = 10 + no_of_frame/5;
+            speed  = 1 + no_of_frame/10; //every 10 frame speed++
         }
 
     }
