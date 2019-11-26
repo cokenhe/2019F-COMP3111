@@ -56,7 +56,18 @@ public class MyController {
     private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
-    private int x = -1, y = 0, dir = 1;//where is my monster
+    private int x = -1, y = 0;
+
+    private enum Direction {
+        DOWNWARD(-1), UPWARD(1);
+
+        private int value;
+        Direction(int i) {this.value = i; }
+        public int getValue() { return this.value; }
+    }
+    private Direction dir = Direction.DOWNWARD;
+    
+
     /**
      * A dummy function to show how button click works
      */
@@ -64,18 +75,20 @@ public class MyController {
     @FXML
     private void play() {
         System.out.println("Play button clicked");
-        Label newLabel = new Label();
-        newLabel.setLayoutX(GRID_WIDTH / 4);
-        newLabel.setLayoutY(GRID_WIDTH / 4);
-        newLabel.setMinWidth(GRID_WIDTH / 2);
-        newLabel.setMaxWidth(GRID_WIDTH / 2);
-        newLabel.setMinHeight(GRID_WIDTH / 2);
-        newLabel.setMaxHeight(GRID_WIDTH / 2);
-        newLabel.setStyle("-fx-border-color: black;");
-        newLabel.setText("*");
-        newLabel.setBackground(new Background(new BackgroundFill(Color.YELLOW,
-        CornerRadii.EMPTY, Insets.EMPTY)));
-        paneArena.getChildren().addAll(newLabel);
+        
+
+        // Label newLabel = new Label();
+        // newLabel.setLayoutX(GRID_WIDTH / 4);
+        // newLabel.setLayoutY(GRID_WIDTH / 4);
+        // newLabel.setMinWidth(GRID_WIDTH / 2);
+        // newLabel.setMaxWidth(GRID_WIDTH / 2);
+        // newLabel.setMinHeight(GRID_WIDTH / 2);
+        // newLabel.setMaxHeight(GRID_WIDTH / 2);
+        // newLabel.setStyle("-fx-border-color: black;");
+        // newLabel.setText("*");
+        // newLabel.setBackground(new Background(new BackgroundFill(Color.YELLOW,
+        // CornerRadii.EMPTY, Insets.EMPTY)));
+        // paneArena.getChildren().addAll(newLabel);
     }
 
     /**
@@ -108,48 +121,35 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if(number_of_frame%5==0){
+        if(number_of_frame % 5 == 0){
             generateMonster();
         }
-        if(dir==1){
-            if (x == -1) {
-                //grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                //ImageView fox = new ImageView(new Image("resources/fox.png"));
-                grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                x = 0;
-                return; 
-            }
-            if (x%2==1){
-                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
-                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                return;
-            }
-            if (y == MAX_V_NUM_GRID - 1){
-                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
-                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                dir=0;
-                return;
-            }
-            grids[y++][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
-            grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+
+        // Initial position
+        if (x == -1) {
+            grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+            x = 0;
+            return; 
         }
-        else{
-            if (x%2==1){
-                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
-                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                return;
-            }
-            if (y == 0){
-                grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
-                grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-                dir = 1;
-                return;
-            }   
-            grids[y--][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+
+        // When col is odd, move to right
+        if (x % 2 == 1 || y == MAX_V_NUM_GRID - 1 || y == 0){
+            grids[y][x++].setStyle("-fx-background-image:none; -fx-border-color: black;");
             grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+
+            dir = (y == 0) ? Direction.DOWNWARD : 
+                  (y == MAX_V_NUM_GRID - 1) ? Direction.UPWARD : dir;
+            return;
         }
+
+        // Moving up / down
+        grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+        y += dir.getValue();
+        grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+
         ++number_of_frame;
     }
+
     @FXML
     private void generateMonster(){
         

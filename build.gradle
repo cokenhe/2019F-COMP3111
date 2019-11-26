@@ -18,12 +18,12 @@ jar {
     manifest {
         attributes 'Implementation-Title': baseName,
                 'Implementation-Version': version,
-                'Main-Class': 'sample.Main'
+                'Main-Class': 'controller.Main'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
-mainClassName = 'sample.Main'
+mainClassName = 'controller.Main'
 
 repositories {
     mavenCentral()
