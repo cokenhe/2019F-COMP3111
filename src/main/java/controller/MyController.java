@@ -1,5 +1,6 @@
-package sample;
+package controller;
 
+// MARK: javafx
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
@@ -11,8 +12,11 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
-import javafx.scene.image.Image;
+// import javafx.scene.image.Image;
 //import javafx.scene.image.ImageView;
+
+// MARK: my classes
+import monster.Monster;
 
 public class MyController {
     @FXML

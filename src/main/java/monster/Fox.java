@@ -1,4 +1,4 @@
-package sample;
+package monster;
 
 import javafx.scene.control.Label;
 
