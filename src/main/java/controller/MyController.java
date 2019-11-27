@@ -59,16 +59,15 @@ public class MyController {
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
-
-    private enum Direction {
+    
+    protected enum Direction { //copied to monster
         DOWNWARD(1), UPWARD(-1);
-
         private int value;
         Direction(int i) {this.value = i; }
         public int getValue() { return this.value; }
     }
-    private Direction dir = Direction.DOWNWARD;
-    
+    protected Direction dir = Direction.DOWNWARD; //copied to monster
+
 
     /**
      * A dummy function to show how button click works
@@ -123,7 +122,7 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        //gernerate monster every 3 fr`ames
+        //gernerate monster every 3 frames
         if(number_of_frame % 3 == 0){ 
             generateMonster();
         }
