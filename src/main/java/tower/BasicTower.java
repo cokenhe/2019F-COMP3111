@@ -15,19 +15,15 @@ import monster.Monster;
             loc = new Location(x,y);
         }
 
-        public void attack(Monster[] monsters){
-            int nearest;
-            for (int i = 0; i < monsters.length; i++){
-                if (loc.inRange(monster[i].getLocation())){
-                    
-                }
-            }
-        }
-
         public void upgrade(){
             if (level >= 5) return;
             level++;
             attackPower++; 
+        }
+
+        public boolean isInRange(Location monsterLoc){
+            double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
+            return (distance <= 65);
         }
     }
 
