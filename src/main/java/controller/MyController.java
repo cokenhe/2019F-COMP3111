@@ -43,6 +43,9 @@ public class MyController {
     @FXML
     private Label labelLaserTower;
 
+    @FXML
+    private Label labelMoneyAmount;
+
     private static final int ARENA_WIDTH = 480;
     private static final int ARENA_HEIGHT = 480;
     private static final int GRID_WIDTH = 40;
@@ -120,6 +123,8 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
+        offerResources();
+
         if(number_of_frame++ % 5 == 0){
             generateMonster();
         }
@@ -144,9 +149,12 @@ public class MyController {
         grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
     }
 
-    @FXML
-    private void generateMonster(){
+    private void generateMonster() {
         
+    }
+
+    private void offerResources() {
+
     }
 
     /**
