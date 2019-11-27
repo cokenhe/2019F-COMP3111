@@ -4,6 +4,7 @@ package controller;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
+import helper.Location;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -67,7 +68,7 @@ public class MyController {
         Direction(int i) {this.value = i; }
         public int getValue() { return this.value; }
     }
-    private Direction dir = Direction.DOWNWARD;
+    private Direction monsterDirection = Direction.DOWNWARD;
     
 
     /**
@@ -77,7 +78,6 @@ public class MyController {
     @FXML
     private void play() {
         System.out.println("Play button clicked");
-        
 
         // Label newLabel = new Label();
         // newLabel.setLayoutX(GRID_WIDTH / 4);
@@ -139,12 +139,12 @@ public class MyController {
         grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
 
         // When col is odd || moved to top / bottom, then move to right
-        if (x % 2 == 1 || (dir == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && y == 0)){
+        if (x % 2 == 1 || (monsterDirection == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (monsterDirection == Direction.UPWARD && y == 0)){
             x += 1;
-            if (y == 0)                  dir = Direction.DOWNWARD;
-            if (y == MAX_V_NUM_GRID - 1) dir = Direction.UPWARD;
+            if (y == 0)                  monsterDirection = Direction.DOWNWARD;
+            if (y == MAX_V_NUM_GRID - 1) monsterDirection = Direction.UPWARD;
         } else // Moving up / down
-            y += dir.getValue();
+            y += monsterDirection.getValue();
 
         grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
     }
@@ -155,6 +155,13 @@ public class MyController {
 
     private void offerResources() {
 
+    }
+
+    /**
+     * Setup the styles of UI elements
+     */
+    private void setStyle() {
+        labelMoneyAmount.setTextFill(Color.YELLOW);
     }
 
     /**
