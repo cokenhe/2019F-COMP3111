@@ -23,8 +23,8 @@ import monster.Monster;
             return this.upgradeCost;
         }
 
-        public int[] getLocation(){
-            return ;
+        public int getLocation(){
+            return 0;
         }
 
         public abstract void attack(Monster m);

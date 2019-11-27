@@ -52,7 +52,7 @@ public class MyController {
     private static final int MAX_V_NUM_GRID = 12;
     private static int number_of_frame = 0;
     
-    private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
+    //private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
