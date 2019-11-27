@@ -1,4 +1,4 @@
-package sample;
+package monster;
 
 public enum MonsterType {
     FOX,

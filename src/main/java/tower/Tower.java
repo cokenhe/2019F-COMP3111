@@ -1,4 +1,6 @@
-package sample;
+package tower;
+
+import monster.Monster;
 
 
     abstract class Tower {

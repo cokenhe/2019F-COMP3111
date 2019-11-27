@@ -1,11 +1,12 @@
-package sample;
+package tower;
 
+import monster.Monster;
 
-    abstract class LaserTower extends Tower{
+    abstract class IceTower extends Tower{
         
         public static final int BUILDCOST = 0;
 
-        LaserTower(int x, int y){
+        IceTower(int x, int y){
             attackPower = 1;
             range = 65;
             upgradeCost = 1;   

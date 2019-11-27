@@ -1,11 +1,14 @@
-package sample;
+package tower;
+
+import monster.Monster;
 
 
-    abstract class IceTower extends Tower{
+    abstract class CatapultTower extends Tower{
         
         public static final int BUILDCOST = 0;
+        private int CoolDownTime;
 
-        IceTower(int x, int y){
+        CatapultTower(int x, int y){
             attackPower = 1;
             range = 65;
             upgradeCost = 1;   

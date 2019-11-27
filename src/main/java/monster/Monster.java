@@ -1,4 +1,4 @@
-package sample;
+package monster;
 
 
     public class Monster {

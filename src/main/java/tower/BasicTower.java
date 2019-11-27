@@ -1,12 +1,13 @@
-package sample;
+package tower;
+
+import monster.Monster;
 
 
-    abstract class CatapultTower extends Tower{
-        
+    abstract class BasicTower extends Tower{
+
         public static final int BUILDCOST = 0;
-        private int CoolDownTime;
 
-        CatapultTower(int x, int y){
+        BasicTower(int x, int y){
             attackPower = 1;
             range = 65;
             upgradeCost = 1;   
@@ -21,7 +22,6 @@ package sample;
         public void upgrade(){
 
         }
-
     }
 
   
