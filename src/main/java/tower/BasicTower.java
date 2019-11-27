@@ -14,7 +14,6 @@ import monster.Monster;
             upgradeCost = 1;   
             loc = new Location(x,y);
         }
-
         public void upgrade(){
             if (level >= 5) return;
             level++;

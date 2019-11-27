@@ -1,7 +1,12 @@
 package helper;
 
 import java.awt.Point;
+import javafx.scene.control.Label;
+import helper.GameConfig;
 
+/**
+ * Save the x, y coordinate in px form
+ */
 public class Location extends Point {
 
     public Location(int x, int y) {
@@ -24,6 +29,15 @@ public class Location extends Point {
         C = monster.y - A * monster.x;
         double distance = Math.abs(A * x - y + C) / Math.sqrt(A * A + 1);
         return distance <= 3;
+    }
+
+    /**
+     * Convert pixel coordinate to grid label
+     * @param grids the Label grids[][]
+     * @return the Label in relative pixel coordinate
+     */
+    public Label getGridLabel(Label grids[][]) {
+        return grids[y / GameConfig.GRID_HEIGHT][x / GameConfig.GRID_WIDTH];
     }
 
 }

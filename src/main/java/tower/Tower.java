@@ -54,7 +54,7 @@ import monster.Monster;
             int numOfInRange = 0;
 
             for (int i = 0; i < monsters.length; ++i){
-                if (isInRange(monsters.getLocation()))
+                if (isInRange(monsters[i].getLocation()))
                     inRange[numOfInRange++] = i;
             }
 
