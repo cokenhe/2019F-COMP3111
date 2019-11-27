@@ -1,7 +1,8 @@
 package monster;
 
+import helper.Location;;
 
-    public class Monster {
+public class Monster {
         
         protected int hp;
         protected int x;
@@ -60,6 +61,9 @@ package monster;
         }
         public int getY(){
             return this.y;
+        }
+        public Location getLocation() {
+            return new Location(0,0);
         }
     }
 

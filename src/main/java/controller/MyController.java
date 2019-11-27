@@ -4,7 +4,6 @@ package controller;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.*;
-import helper.Location;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -15,9 +14,14 @@ import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+// MARK: java 
 import java.util.Random;
 
+// MARK: custom classes
 import monster.*;
+import helper.Location;
+import helper.GameConfig;
 
 public class MyController {
     @FXML
@@ -47,21 +51,13 @@ public class MyController {
     @FXML
     private Label labelMoneyAmount;
 
-    private static final int ARENA_WIDTH = 480;
-    private static final int ARENA_HEIGHT = 480;
-    private static final int GRID_WIDTH = 40;
-    private static final int GRID_HEIGHT = 40;
-    private static final int MAX_H_NUM_GRID = 12;
-    private static final int MAX_MONSTER_NUMBER = 999;
-    private static final int MAX_V_NUM_GRID = 12;
-    private static final int NO_OF_MONSTER_TYPE = 3;
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
     private static Random rand = new Random(System.currentTimeMillis());
     
-    private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
+    private static Monster monsters[] = new Monster[GameConfig.MAX_MONSTER_NUMBER];
 
-    private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
+    private Label grids[][] = new Label[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
     
     protected enum Direction { //copied to monster
@@ -102,19 +98,19 @@ public class MyController {
     public void createArena() {
         if (grids[0][0] != null)
             return; //created already
-        for (int i = 0; i < MAX_V_NUM_GRID; i++)
-            for (int j = 0; j < MAX_H_NUM_GRID; j++) {
+        for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
+            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
                 Label newLabel = new Label();
-                if (j % 2 == 0 || i == ((j + 1) / 2 % 2) * (MAX_V_NUM_GRID - 1))
+                if (j % 2 == 0 || i == ((j + 1) / 2 % 2) * (GameConfig.MAX_V_NUM_GRID - 1))
                     newLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
                 else
                     newLabel.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-                newLabel.setLayoutX(j * GRID_WIDTH);
-                newLabel.setLayoutY(i * GRID_HEIGHT);
-                newLabel.setMinWidth(GRID_WIDTH);
-                newLabel.setMaxWidth(GRID_WIDTH);
-                newLabel.setMinHeight(GRID_HEIGHT);
-                newLabel.setMaxHeight(GRID_HEIGHT);
+                newLabel.setLayoutX(j * GameConfig.GRID_WIDTH);
+                newLabel.setLayoutY(i * GameConfig.GRID_HEIGHT);
+                newLabel.setMinWidth(GameConfig.GRID_WIDTH);
+                newLabel.setMaxWidth(GameConfig.GRID_WIDTH);
+                newLabel.setMinHeight(GameConfig.GRID_HEIGHT);
+                newLabel.setMaxHeight(GameConfig.GRID_HEIGHT);
                 newLabel.setStyle("-fx-border-color: black;");
                 grids[i][j] = newLabel;
                 paneArena.getChildren().addAll(newLabel);
@@ -143,10 +139,10 @@ public class MyController {
         grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
 
         // When col is odd || moved to top / bottom, then move to right
-        if (x % 2 == 1 || (monsterDirection == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (monsterDirection == Direction.UPWARD && y == 0)){
+        if (x % 2 == 1 || (monsterDirection == Direction.DOWNWARD && y == GameConfig.MAX_V_NUM_GRID - 1) || (monsterDirection == Direction.UPWARD && y == 0)){
             x += 1;
             if (y == 0)                  monsterDirection = Direction.DOWNWARD;
-            if (y == MAX_V_NUM_GRID - 1) monsterDirection = Direction.UPWARD;
+            if (y == GameConfig.MAX_V_NUM_GRID - 1) monsterDirection = Direction.UPWARD;
         } else // Moving up / down
             y += monsterDirection.getValue();
 
@@ -155,7 +151,7 @@ public class MyController {
 
     @FXML
     private void generateMonster(){
-        switch(rand.nextInt(NO_OF_MONSTER_TYPE)){
+        switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
             case 1:
                 monsters[number_of_monster++] = new Fox(number_of_frame);
                 break;
@@ -188,8 +184,8 @@ public class MyController {
         labelCatapult.setOnDragDetected(new DragEventHandler(labelCatapult));
         labelLaserTower.setOnDragDetected(new DragEventHandler(labelLaserTower));
 
-        for (int i = 0; i < MAX_V_NUM_GRID; i++)
-            for (int j = 0; j < MAX_H_NUM_GRID; j++) {
+        for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
+            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
                 Label target = grids[i][j];
                 if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) continue;
 
