@@ -14,9 +14,9 @@ import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import java.util.Random;
 
-// MARK: my classes
-import monster.Monster;
+import monster.*;
 
 public class MyController {
     @FXML
@@ -50,9 +50,12 @@ public class MyController {
     private static final int MAX_H_NUM_GRID = 12;
     private static final int MAX_MONSTER_NUMBER = 999;
     private static final int MAX_V_NUM_GRID = 12;
+    private static final int NO_OF_MONSTER_TYPE = 3;
     private static int number_of_frame = 0;
+    private static int number_of_monster = 0;
+    private static Random rand = new Random(System.currentTimeMillis());
     
-    //private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
+    private static Monster monsters[] = new Monster[MAX_MONSTER_NUMBER];
 
     private Label grids[][] = new Label[MAX_V_NUM_GRID][MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
@@ -120,7 +123,8 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if(number_of_frame % 5 == 0){
+        //gernerate monster every 3 fr`ames
+        if(number_of_frame % 3 == 0){ 
             generateMonster();
         }
 
@@ -151,7 +155,17 @@ public class MyController {
 
     @FXML
     private void generateMonster(){
-        
+        switch(rand.nextInt(NO_OF_MONSTER_TYPE)){
+            case 1:
+                monsters[number_of_monster++] = new Fox(number_of_frame);
+                break;
+            case 2:
+                monsters[number_of_monster++] = new Unicorn(number_of_frame);
+                break;
+            case 3:
+                monsters[number_of_monster++] = new Penguim(number_of_frame);
+                break;
+        }
     }
 
     /**

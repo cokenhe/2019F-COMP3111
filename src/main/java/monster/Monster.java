@@ -8,6 +8,7 @@ package monster;
         protected int y;
         protected int dir;
         protected int speed;
+        protected String icon;
 
         Monster(){
             x=0;
@@ -15,6 +16,7 @@ package monster;
             dir=1;
             hp=5;   
             speed =1; 
+            icon="";
         }
         public void move(int MAX_V_NUM_GRID){ //need pass the MAX_V_NUM_GRID into this function
             if(dir==1){
