@@ -1,9 +1,11 @@
-package sample;
+package tower;
+
+import monster.Monster;
 
 
-    abstract class IceTower extends Tower{
+    abstract class CatapultTower extends Tower{
         
-        IceTower(){
+        CatapultTower(){
 
         }
 

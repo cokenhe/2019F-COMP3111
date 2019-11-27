@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" maxHeight="480.0" minHeight="480.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MyController">
+<GridPane alignment="center" hgap="10" maxHeight="480.0" minHeight="480.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -26,7 +26,7 @@
                   <Button fx:id="buttonNextFrame" layoutX="4.0" layoutY="24.0" mnemonicParsing="false" onAction="#nextFrame" text="Next Frame" />
                   <Button fx:id="buttonSimulate" layoutX="5.0" layoutY="65.0" mnemonicParsing="false" text="Simulate" />
                   <Button fx:id="buttonPlay" layoutX="6.0" layoutY="108.0" mnemonicParsing="false" onAction="#play" text="Play" />
-                  <Label fx:id="labelBasicTower" layoutX="17.0" layoutY="257.0" minWidth="80.0" style="-fx-border-color: black;" text="Basic Tower">
+                  <Label fx:id="labelBasicTower" layoutX="17.0" layoutY="260.0" minWidth="40.0" minHeight="40.0" id="basicTower" style="-fx-background-image:url('basicTower.png');-fx-background-size:40px 40px;-fx-border-color: black;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -37,7 +37,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="labelIceTower" layoutX="17.0" layoutY="283.0" minWidth="80.0" style="-fx-border-color: black;" text="Ice Tower">
+                  <Label fx:id="labelIceTower" layoutX="60.0" layoutY="260.0" minWidth="40.0" minHeight="40.0" id="iceTower" style="-fx-background-image:url('icetower.png');-fx-background-size:40px 40px;-fx-border-color: black;">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -45,7 +45,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="labelCatapult" layoutX="17.0" layoutY="311.0" minWidth="80.0" style="-fx-border-color: black;" text="Catapult">
+                  <Label fx:id="labelCatapult" layoutX="17.0" layoutY="303.0" minWidth="40.0" minHeight="40.0" id="catapult" style="-fx-background-image:url('catapult.png');-fx-background-size:40px 40px;-fx-border-color: black;">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -53,7 +53,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label fx:id="labelLaserTower" layoutX="17.0" layoutY="339.0" minWidth="80.0" style="-fx-border-color: black;" text="Laser Tower">
+                  <Label fx:id="labelLaserTower" layoutX="60.0" layoutY="303.0" minWidth="40.0" minHeight="40.0" id="laserTower" style="-fx-background-image:url('laserTower.png');-fx-background-size:40px 40px;-fx-border-color: black;">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -61,7 +61,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </Label>
-                  <Label layoutX="17.0" layoutY="381.0" text="Money: " />
+                  <Label layoutX="17.0" layoutY="380.0" text="Money: " />
                </children>
                <padding>
                   <Insets left="10.0" />
