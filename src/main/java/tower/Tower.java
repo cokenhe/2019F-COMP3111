@@ -1,22 +1,18 @@
 package tower;
 
+import helper.Location;
 import monster.Monster;
 
-
-    abstract class Tower {
+    abstract public class Tower {
         
         protected int attackPower;
-        protected int buildCost;
         protected int range;
         protected int upgradeCost;
-        protected int location[];
+        protected int level = 1;
+        protected Location loc;
 
         public int getAttackPower(){
             return this.attackPower;
-        }
-
-        public int getBuildCost(){
-            return this.buildCost;
         }
 
         public int getRange(){
@@ -27,11 +23,11 @@ import monster.Monster;
             return this.upgradeCost;
         }
 
-        public int[] getLocation(){
-            return this.location;
+        public Location getLocation(){
+            return loc;
         }
 
-        public abstract void attack(Monster m);
+        public abstract void attack(Monster monsters);
 
         public abstract void upgrade();
 
