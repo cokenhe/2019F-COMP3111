@@ -6,17 +6,13 @@ import monster.Monster;
     abstract class Tower {
         
         protected int attackPower;
-        protected int buildCost;
         protected int range;
         protected int upgradeCost;
-        protected int location[];
+        protected int x;
+        protected int y;
 
         public int getAttackPower(){
             return this.attackPower;
-        }
-
-        public int getBuildCost(){
-            return this.buildCost;
         }
 
         public int getRange(){
@@ -28,7 +24,7 @@ import monster.Monster;
         }
 
         public int[] getLocation(){
-            return this.location;
+            return ;
         }
 
         public abstract void attack(Monster m);
