@@ -9,7 +9,7 @@ package monster;
             speed  = speed + no_of_frame/10; //every 10 frame speed++ 
           }
         void replenish(){
-            hp++;
+            this.hp++;
         }
 
     }
