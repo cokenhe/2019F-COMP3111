@@ -1,6 +1,5 @@
 package monster;
 
-import javafx.scene.control.Label;
 
 public class Fox extends Monster {
         //public Label Label = new Label("Fox");
