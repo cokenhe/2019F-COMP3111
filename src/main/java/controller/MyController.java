@@ -77,6 +77,16 @@ public class MyController {
     private void play() {
         System.out.println("Play button clicked");
 
+        Location a = new Location(0, 0);
+        Location b = new Location(1, 1);
+
+        for (int i = -6; i < 6; i+=2) {
+            for (int j = -3; j < 3; j++) {
+                Location l = new Location(i,j);
+                System.out.println(String.format("(%d, %d): " + l.isInRange(a, b), i, j));
+            }
+        }
+
         // Label newLabel = new Label();
         // newLabel.setLayoutX(GRID_WIDTH / 4);
         // newLabel.setLayoutY(GRID_WIDTH / 4);

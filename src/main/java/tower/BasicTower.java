@@ -18,9 +18,9 @@ import monster.Monster;
         public void attack(Monster[] monsters){
             int nearest;
             for (int i = 0; i < monsters.length; i++){
-                if (loc.isInRange(monsters[i].getLocation())){
+                // if (loc.isInRange(monsters[i].getLocation())){
                     
-                }
+                // }
             }
         }
 

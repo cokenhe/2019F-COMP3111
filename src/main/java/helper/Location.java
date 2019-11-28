@@ -18,17 +18,47 @@ public class Location extends Point {
     }
 
     /**
-     * determin if this point is covered by the laser
+     * determine if this point is covered by the laser
      * @param tower location of tower
      * @param monster location of monster
      * @return true - in range, false - out of range
      */
     public boolean isInRange(Location tower, Location monster) {
-        double A, C;
-        A = (tower.y - monster.y) / (tower.x - monster.x);
-        C = monster.y - A * monster.x;
-        double distance = Math.abs(A * x - y + C) / Math.sqrt(A * A + 1);
-        return distance <= 3;
+        boolean inRange = false, inSameDirection = false;
+        double A, B, C;
+
+        if (tower.x == monster.x) { // verticle line, slope = 0
+            inSameDirection = (tower.y > monster.y && tower.y > y)
+                            || (tower.y < monster.y && tower.y < y);
+            A = 1;
+            B = 0;
+            C = tower.x;
+        } else if (tower.y == monster.y) { // horizontal line, slope = infinity
+            inSameDirection = (tower.x > monster.x && tower.x > x)
+                            || (tower.x < monster.x && tower.x < x);
+            A = 0;
+            B = 1;
+            C = tower.y;
+        } else {
+            // General form
+            A = (tower.y - monster.y) / (tower.x - monster.x);
+            B = -1;
+            C = monster.y - A * monster.x;
+            // Slope-intercept form for perpendicular equation
+            double m, c;
+            m = -1 / A;
+            c = tower.y - tower.x * m;
+            
+            double degree = tower.getAngle(monster);
+            
+            inSameDirection = (((degree >= 0 && degree <= 90) || (degree > 270 && degree <= 360)) && ((m * x - y + c) * m > 0)) 
+                        || (degree > 90 && degree <= 270 && ((m * x - y + c) * m < 0));
+        }
+
+        inRange = Math.abs(A * x + B * y + C) / Math.sqrt(A * A + 1) <= 3;
+
+        // System.out.println(String.format("inRange: %s\tinSameDirection: %s\t", inRange, inSameDirection));
+        return inRange && inSameDirection;
     }
 
     /**
@@ -38,6 +68,13 @@ public class Location extends Point {
      */
     public Label getGridLabel(Label grids[][]) {
         return grids[y / GameConfig.GRID_HEIGHT][x / GameConfig.GRID_WIDTH];
+    }
+
+    public double getAngle(Point target) {
+        double angle = Math.toDegrees(Math.atan2(target.y - y, target.x - x));
+        if (angle < 0)
+            angle += 360;
+        return angle;
     }
 
 }
