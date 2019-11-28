@@ -10,6 +10,7 @@ public class Monster {
         protected int speed;   //how many times need to call move() per 1 frames
         protected String icon; //the name of the image 
         protected boolean alive;
+        
         protected enum Direction {
             DOWNWARD(1), UPWARD(-1);
             private int value;
@@ -26,21 +27,21 @@ public class Monster {
             alive = true;
             icon="";
         }
-        public void move(int MAX_V_NUM_GRID){ //need pass the MAX_V_NUM_GRID into this function
-            
-        // Initial position
-        if (x == -1) {
-            return; 
-        }
-        // When col is odd, move to right
-        if (x % 2 == 1 || (dir == Direction.DOWNWARD && y == MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && y == 0)){
-            ++x;
-            dir = (y == 0)                  ? Direction.DOWNWARD : 
-                  (y == MAX_V_NUM_GRID - 1) ? Direction.UPWARD   : dir;
-            return;
-        }
-        // Moving up / down
-        y += dir.getValue();
+        public void move(){ 
+                
+            // Initial position
+            if (x == -1) {
+                return; 
+            }
+            // When col is odd, move to right
+            if (x % 2 == 1 || (dir == Direction.DOWNWARD && y == GameConfig.MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && y == 0)){
+                ++x;
+                dir = (y == 0)? Direction.DOWNWARD : 
+                    (y == GameConfig.MAX_V_NUM_GRID - 1) ? Direction.UPWARD   : dir;
+                return;
+            }
+            // Moving up / down
+            y += dir.getValue();
         }
         public int getHP(){
             return this.hp;
@@ -56,15 +57,13 @@ public class Monster {
         public boolean isAlive(){
             return this.alive;
         }
-        public int getX(){
-            return this.x;
-        }
-        public int getY(){
-            return this.y;
+        public String getIcon(){
+            return this.icon;
         }
         public Location getLocation() {
             return new Location(0,0);
         }
+        
     }
 
   
