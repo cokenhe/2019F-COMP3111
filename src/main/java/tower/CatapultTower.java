@@ -22,7 +22,11 @@ import monster.Monster;
         }
 
         public void coolDown(){
-            coolDownCounter = coolDownTime[level-1];
+            if (coolDownCounter == 0)
+                coolDownCounter = coolDownTime[level-1];
+            else
+                coolDownCounter--;
+
         }
 
         /**
@@ -73,8 +77,10 @@ import monster.Monster;
                     coolDown();
                 return selectedMonster;
             }
-            else
+            else{
+                coolDown();
                 return null;
+            }
         }
     }
 
