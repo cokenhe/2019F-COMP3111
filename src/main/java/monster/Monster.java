@@ -36,8 +36,8 @@ public class Monster {
         }
         public void move(){ 
             //still under slow?
-            if(slowDuration--==0) //slow period end, recover
-                speed = oriSpeed;
+            if(slowDuration>0) //slow period end, recover
+                --slowDuration;
             // Initial position
             if (location.x == -1) {
                 return; 
@@ -76,7 +76,10 @@ public class Monster {
             this.dying = false;
         }
         public int getSpeed(){
-            return this.speed;
+            if(slowDuration>0)
+                return this.speed/2;
+            else    
+                return this.speed;
         }
         
         public boolean isAlive(){
