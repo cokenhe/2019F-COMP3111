@@ -66,7 +66,7 @@ import monster.Monster;
         @Override
         public boolean isInRange(Location monsterLoc) {
             double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
-            return (distance < maxRange || distance > minRange);
+            return (distance < maxRange && distance > minRange);
         }
 
         @Override
