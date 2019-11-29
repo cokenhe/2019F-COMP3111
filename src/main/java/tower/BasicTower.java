@@ -1,23 +1,21 @@
 package tower;
 
 import helper.Location;
-import monster.Monster;
 
 
     public class BasicTower extends Tower{
 
-        public static final int BUILDCOST = 0;
+        public static final int BUILDCOST = 50;
 
         public BasicTower(int x, int y){
-            attackPower = 1;
+            attackPower = new int[]{5, 6, 7, 8, 9};
             range = 65;
-            upgradeCost = 1;   
+            upgradeCost = new int[]{20, 20, 30 ,30 ,30};   
             loc = new Location(x,y);
         }
         public void upgrade(){
-            if (level >= 5) return;
+            if (level >= MAXLEVEL) return;
             level++;
-            attackPower++; 
         }
 
         public boolean isInRange(Location monsterLoc){
