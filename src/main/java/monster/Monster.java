@@ -1,7 +1,6 @@
 package monster;
 
 import helper.Location;
-import sun.security.provider.JavaKeyStore.DualFormatJKS;
 import helper.GameConfig;
 
 public class Monster {
