@@ -13,6 +13,7 @@ public class Monster {
         protected Location location;
         protected int reward;
         protected boolean reachEndZone;
+        protected String status;
         protected enum Direction {
             DOWNWARD(1), UPWARD(-1);
             private int value;
@@ -87,7 +88,12 @@ public class Monster {
         public boolean isReachEndZone(){
             return this.reachEndZone;
         }
-        
+        public String getStatus(){
+            return status;
+        }        
+        public void setStatus(String status){
+            this.status = status;
+        }        
     }
 
   
