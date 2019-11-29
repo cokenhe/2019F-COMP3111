@@ -182,16 +182,7 @@ public class MyController {
         buttonUpgrade.setDisable(true);
         buttonDestroy.setDisable(true);
         grids[selectedY][selectedX].setStyle("-fx-border-color: black;");
-
-        for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
-            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
-                Label target = grids[i][j];
-                if (target != null && target.getBackground() != null && target.getBackground().getFills().size() > 0 && target.getBackground().getFills().get(0).getFill() == Color.YELLOW) {
-                    if (selectedTower.isInRange(new Location(i, j))) {
-                        target.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-                    }
-                }
-            }
+        toggleFireRange(false);
     }
 
     @FXML
@@ -231,8 +222,8 @@ public class MyController {
     private void cleanIcon(){
         for(int i=0;i<number_of_monster;++i){
             Location monster = monsters[i].getLocation();
-            int x = monster.x;
-            int y = monster.y;
+            int x = monster.getGridX();
+            int y = monster.getGridY();
             
             // grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
             grids[y][x].setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -266,16 +257,20 @@ public class MyController {
     private void iconUpdate(){
         for(int i=0;i<number_of_monster;++i){
             Monster monster = monsters[i];
-            int x = monster.getLocation().x;
-            int y = monster.getLocation().y;
+            int x = monster.getLocation().getGridX();
+            int y = monster.getLocation().getGridY();
 
             if(monsters[i].isAlive()){
                 // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
                 Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
                 grids[y][x].setGraphic(new ImageView(image));
                 grids[y][x].setMaxSize(40.0, 40.0);
-                
-                grids[y][x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));                      
+
+                grids[y][x].setTooltip(new Tooltip(
+                    "HP:\t" + monsters[i].getHP() + "\n" +
+                    "Speed:\t" + monsters[i].getSpeed() + "\n" + 
+                    "Reward:\t" + monsters[i].getReward()
+                ));                      
             }       
             if(monsters[i].isDying()&&!monsters[i].isAlive()){
                 // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
@@ -283,7 +278,11 @@ public class MyController {
                 grids[y][x].setGraphic(new ImageView(image));
                 grids[y][x].setMaxSize(40.0, 40.0);
 
-                grids[y][x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));
+                grids[y][x].setTooltip(new Tooltip(
+                    "HP:\t" + monsters[i].getHP() + "\n" +
+                    "Speed:\t" + monsters[i].getSpeed() + "\n" + 
+                    "Reward:\t" + monsters[i].getReward()
+                ));   
                 monsters[i].dead();
                 updateResources(monsters[i].getReward());
             }       
@@ -300,26 +299,28 @@ public class MyController {
     private boolean constructTower(String towerType, int x, int y) {
         int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
         int cost = 0;
+        int px = x * GameConfig.GRID_HEIGHT + 20;
+        int py = y * GameConfig.GRID_WIDTH + 20;
 
         if (towerType.compareTo("basicTower") == 0) {
             cost = BasicTower.BUILDCOST;
             if (cost > moneyBalance) return false;
-            towers[number_of_tower++] = new BasicTower(x, y);
+            towers[number_of_tower++] = new BasicTower(px, py);
         }
         else if (towerType.compareTo("catapult") == 0) {
             cost = CatapultTower.BUILDCOST;
             if (cost > moneyBalance) return false;
-            towers[number_of_tower++] = new CatapultTower(x, y);
+            towers[number_of_tower++] = new CatapultTower(px, py);
         }
         else if (towerType.compareTo("iceTower") == 0) {
             cost = IceTower.BUILDCOST;
             if (cost > moneyBalance) return false;
-            towers[number_of_tower++] = new IceTower(x, y);
+            towers[number_of_tower++] = new IceTower(px, py);
         }
         else if (towerType.compareTo("laserTower") == 0) {
             cost = LaserTower.BUILDCOST;
             if (cost > moneyBalance) return false;
-            towers[number_of_tower++] = new LaserTower(x, y);
+            towers[number_of_tower++] = new LaserTower(px, py);
         }
         else return false;
 
@@ -347,6 +348,38 @@ public class MyController {
                 System.out.println("Gameover");
             }       
         }
+    }
+
+
+    public void searchTower() {
+        for (int i = 0; i < number_of_tower; i++) {
+            int x = towers[i].getLocation().getGridX();
+            int y = towers[i].getLocation().getGridY();
+            if (x == selectedX && y == selectedY) {
+                selectedTower = towers[i];
+                break;
+            }
+            selectedTower = null;
+        }
+    }
+
+    public void toggleFireRange(boolean shouldOn) {
+        Color toColor = shouldOn ? Color.YELLOW : Color.WHITE;
+        Color fromColor = shouldOn ? Color.WHITE : Color.YELLOW;
+
+        for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
+            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
+                Label target = grids[i][j];
+                if (target != null 
+                    && target.getBackground() != null 
+                    && target.getBackground().getFills().size() > 0 
+                    && target.getBackground().getFills().get(0).getFill() == fromColor) 
+                    if (selectedTower.isInRange(new Location(i * GameConfig.GRID_HEIGHT + 20, j * GameConfig.GRID_WIDTH + 20))) {
+                        target.setBackground(new Background(new BackgroundFill(toColor, CornerRadii.EMPTY, Insets.EMPTY)));
+
+                        System.out.println(String.format("\nTower: (%d, %d) -> (%d, %d)\ttarget: (%d, %d)", selectedTower.getLocation().x, selectedTower.getLocation().y, selectedTower.getLocation().getGridX(), selectedTower.getLocation().getGridY(), j, i));
+                    }
+            }
     }
 
     /**
@@ -466,7 +499,7 @@ public class MyController {
             selectedY = Integer.parseInt(targetLocation.split(",")[0]);
             selectedX = Integer.parseInt(targetLocation.split(",")[1]);
             searchTower();
-            labelFireRange();
+            toggleFireRange(true);
 
             target.setStyle("-fx-border-color: yellow;");
 
@@ -474,30 +507,6 @@ public class MyController {
             buttonDestroy.setDisable(false);
 
             event.consume();
-        }
-
-        public void searchTower() {
-            for (int i = 0; i < number_of_tower; i++) {
-                int x = towers[i].getLocation().x;
-                int y = towers[i].getLocation().y;
-                if (x == selectedX && y == selectedY) {
-                    selectedTower = towers[i];
-                    break;
-                }
-                selectedTower = null;
-            }
-        }
-
-        public void labelFireRange() {
-            for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
-                for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
-                    Label target = grids[i][j];
-                    if (target != null && target.getBackground() != null && target.getBackground().getFills().size() > 0 && target.getBackground().getFills().get(0).getFill() == Color.WHITE) {
-                        if (selectedTower.isInRange(new Location(i, j))) {
-                            target.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-                        }
-                    }
-                }
         }
     }
 

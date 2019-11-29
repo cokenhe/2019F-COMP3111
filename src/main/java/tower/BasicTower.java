@@ -19,6 +19,7 @@ import helper.Location;
         }
 
         public boolean isInRange(Location monsterLoc){
+            System.out.println(String.format("Tower: (%d, %d) -> (%d, %d)\tMonster: (%d, %d) -> (%d, %d)", loc.x, loc.y, loc.getGridX(), loc.getGridY(), monsterLoc.x, monsterLoc.y, monsterLoc.getGridX(), monsterLoc.getGridY()));
             double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
             return (distance <= range);
         }
