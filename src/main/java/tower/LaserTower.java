@@ -57,9 +57,9 @@ import monster.Monster;
         }
 
         @Override
-        public Monster findNearestMonster(Monster[] monsters) {
+        public Monster findNearestMonster(Monster[] monsters, int size) {
             if (!isRecharging()){
-                Monster selectedMonster = super.findNearestMonster(monsters);
+                Monster selectedMonster = super.findNearestMonster(monsters, size);
                 if (selectedMonster != null)
                     energy -= consumeRate[level-1];
                     recharge();

@@ -19,7 +19,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.Console;
 // MARK: java 
 import java.util.Random;
 
@@ -38,6 +37,12 @@ public class MyController {
 
     @FXML
     private Button buttonPlay;
+
+    @FXML
+    private Button buttonUpgrade;
+
+    @FXML
+    private Button buttonDestroy;
 
     @FXML
     private AnchorPane paneArena;
@@ -59,6 +64,9 @@ public class MyController {
 
     @FXML
     private Label labelEnergyAmount;
+
+    private int selectedX, selectedY;
+    private Tower selectedTower;
 
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
@@ -129,6 +137,7 @@ public class MyController {
             updateResources(150 + number_of_frame * 30);            
             cleanIcon();              //clear all monster's icon
             moveMonster();            //all existing monster move 
+            fireAttack();
             generateMonster();        //gernerate monster every 3 frames
             iconUpdate();             //update icon of monster  
             checkEndGame();
@@ -137,6 +146,45 @@ public class MyController {
             endGameDialog.showAndWait().ifPresent((btnType) -> {    //show dialog to say game over
             });
         }
+    }
+
+    @FXML 
+    private void upgradeTower() {
+        int money = Integer.parseInt(labelMoneyAmount.getText());
+        if (money < selectedTower.getUpgradeCost()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Not enough money");
+            alert.showAndWait().ifPresent((btnType) -> {});
+        }
+        
+        this.selectedTower.upgrade();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Infomation");
+        alert.setHeaderText("Tower upgrade successfully");
+        alert.showAndWait().ifPresent((btnType) -> {});
+    }
+
+    @FXML 
+    private void destroyTower() {
+
+    }
+
+    @FXML
+    private void cancelAction() {
+        buttonUpgrade.setDisable(true);
+        buttonDestroy.setDisable(true);
+        grids[selectedY][selectedX].setStyle("-fx-border-color: black;");
+
+        for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
+            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
+                Label target = grids[i][j];
+                if (target.getBackground().getFills().get(0).getFill() == Color.YELLOW) {
+                    if (selectedTower.isInRange(new Location(i, j))) {
+                        target.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    }
+                }
+            }
     }
 
     @FXML
@@ -195,6 +243,13 @@ public class MyController {
             }       
         }
     }
+
+    private void fireAttack() {
+        for (int i = 0; i < number_of_tower; i++) {
+            towers[i].attack(monsters, number_of_monster);
+        }
+    }
+
     /**
      * update the icon of living monster in the whole arena
      */
@@ -213,6 +268,7 @@ public class MyController {
                 grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
                 grids[y][x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));
                 monsters[i].dead();
+                updateResources(monsters[i].getReward());
             }       
                             
         }
@@ -224,32 +280,32 @@ public class MyController {
         labelMoneyAmount.setText(Integer.toString(moneyBalance));
     }
 
-    private void constructTower(String towerType, int x, int y) {
+    private boolean constructTower(String towerType, int x, int y) {
         int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
         int cost = 0;
 
-        if (towerType == "basicTower") {
+        if (towerType.compareTo("basicTower") == 0) {
             cost = BasicTower.BUILDCOST;
-            if (cost > moneyBalance) return;
+            if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new BasicTower(x, y);
         }
-        if (towerType == "catapultTower") {
+        if (towerType.compareTo("catapultTower") == 0) {
             cost = CatapultTower.BUILDCOST;
-            if (cost > moneyBalance) return;
+            if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new CatapultTower(x, y);
         }
-        if (towerType == "iceTower") {
+        if (towerType.compareTo("iceTower") == 0) {
             cost = IceTower.BUILDCOST;
-            if (cost > moneyBalance) return;
+            if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new IceTower(x, y);
         }
-        if (towerType == "laserTower") {
+        if (towerType.compareTo("laserTower") == 0) {
             cost = LaserTower.BUILDCOST;
-            if (cost > moneyBalance) return;
+            if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new LaserTower(x, y);
         }
-
         updateResources(-cost);
+        return true;
     }
     
     /**
@@ -268,15 +324,14 @@ public class MyController {
             }       
         }
     }
-    private void offerResources() {
-
-    }
 
     /**
      * Setup the styles of UI elements
      */
     private void setStyle() {
         labelMoneyAmount.setTextFill(Color.ORANGE);
+        buttonDestroy.setDisable(true);
+        buttonUpgrade.setDisable(true);
     }
 
     /**
@@ -345,7 +400,15 @@ public class MyController {
                 String targetLocation = target.getId();
                 int y = Integer.parseInt(targetLocation.split(",")[0]);
                 int x = Integer.parseInt(targetLocation.split(",")[1]);
-                constructTower(db.getString(), x, y);
+                if (!constructTower(db.getString(), x, y)) {
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Warning");
+                    alert.setHeaderText("Not enough money");
+                    alert.showAndWait().ifPresent((btnType) -> {});
+                    event.consume();
+                    return;
+                }
+
                 Image image = new Image(db.getString() + ".png", 40, 40, true, true);
                 target.setGraphic(new ImageView(image));
                 target.setMaxSize(40.0, 40.0);
@@ -357,11 +420,57 @@ public class MyController {
                 target.setOnDragOver(null);
                 target.setOnDragExited(null);
 
+                target.setOnMouseClicked(new ClickedEventHandler());
+
                 success = true;
             }
             event.setDropCompleted(success);
             event.consume();
 
+        }
+    }
+
+    class ClickedEventHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            Label target = (Label) event.getTarget();
+            String targetLocation = target.getId();
+            selectedY = Integer.parseInt(targetLocation.split(",")[0]);
+            selectedX = Integer.parseInt(targetLocation.split(",")[1]);
+            searchTower();
+            labelFireRange();
+
+            target.setStyle("-fx-border-color: yellow;");
+
+            buttonUpgrade.setDisable(false);
+            buttonDestroy.setDisable(false);
+
+            event.consume();
+        }
+
+        public void searchTower() {
+            for (int i = 0; i < number_of_tower; i++) {
+                int x = towers[i].getLocation().x;
+                int y = towers[i].getLocation().y;
+                if (x == selectedX && y == selectedY) {
+                    selectedTower = towers[i];
+                    break;
+                }
+                selectedTower = null;
+            }
+        }
+
+        public void labelFireRange() {
+            for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
+                for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
+                    Label target = grids[i][j];
+                    if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) {
+                        if (selectedTower.isInRange(new Location(i, j))) {
+                            target.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+                        }
+                    }
+                }
         }
     }
 

@@ -66,9 +66,9 @@ import monster.Monster;
         }
 
         @Override
-        public Monster findNearestMonster(Monster[] monsters) {
+        public Monster findNearestMonster(Monster[] monsters, int size) {
             if (coolDownCounter == 0){
-                Monster selectedMonster = super.findNearestMonster(monsters);
+                Monster selectedMonster = super.findNearestMonster(monsters, size);
                 if (selectedMonster != null)
                     coolDown();
                 return selectedMonster;

@@ -45,12 +45,12 @@ import monster.Monster;
          * @param monsters Array of the monster in Arena
          * @return 
          */
-        public Monster findNearestMonster(Monster[] monsters){
+        public Monster findNearestMonster(Monster[] monsters, int size){
 
             int[] inRange = new int[monsters.length];
             int numOfInRange = 0;
 
-            for (int i = 0; i < monsters.length; ++i){
+            for (int i = 0; i < size; ++i){
                 if (isInRange(monsters[i].getLocation()))
                     inRange[numOfInRange++] = i;
             }
@@ -72,8 +72,8 @@ import monster.Monster;
                 return monsters[inRange[0]];
         }
 
-        public void attack(Monster[] monsters){
-            Monster selectedMonster = findNearestMonster(monsters);
+        public void attack(Monster[] monsters, int size){
+            Monster selectedMonster = findNearestMonster(monsters, size);
             if (selectedMonster != null)
                 selectedMonster.reduceHP(attackPower[level-1]);
         }
