@@ -43,14 +43,14 @@ import monster.Monster;
         /**
          * Find the Monster nearest to End-Zone in attack range
          * @param monsters Array of the monster in Arena
-         * @return 
+         * @return the nearest monster
          */
-        public Monster findNearestMonster(Monster[] monsters, int size){
+        public Monster findNearestMonster(Monster[] monsters){
 
             int[] inRange = new int[monsters.length];
             int numOfInRange = 0;
 
-            for (int i = 0; i < size; ++i){
+            for (int i = 0; monsters[i] != null; ++i){
                 if (isInRange(monsters[i].getLocation()))
                     inRange[numOfInRange++] = i;
             }
@@ -59,7 +59,7 @@ import monster.Monster;
             
             if (numOfInRange > 1){
                 int nearest = inRange[0];
-                for (int j = 1; j < inRange.length; ++j){
+                for (int j = 1; inRange[j] != 0; ++j){
                     double nearestDistance = Math.sqrt((440 - monsters[inRange[0]].getLocation().x) * (440 - monsters[inRange[0]].getLocation().x) + (0 - monsters[inRange[0]].getLocation().y) * (0 - monsters[inRange[0]].getLocation().y));
                     double newDistance = Math.sqrt((440 - monsters[inRange[j]].getLocation().x) * (440 - monsters[inRange[j]].getLocation().x) + (0 - monsters[inRange[j]].getLocation().y) * (0 - monsters[inRange[j]].getLocation().y));
                     if (nearestDistance > newDistance){
@@ -72,14 +72,27 @@ import monster.Monster;
                 return monsters[inRange[0]];
         }
 
-        public void attack(Monster[] monsters, int size){
-            Monster selectedMonster = findNearestMonster(monsters, size);
+        
+        /**
+         * Find a monster to attack
+         * @param monsters Monsters in the Arena
+         */
+        public void attack(Monster[] monsters){
+            Monster selectedMonster = findNearestMonster(monsters);
             if (selectedMonster != null)
                 selectedMonster.reduceHP(attackPower[level-1]);
         }
 
+        /**
+         * Check if the monster is in the attack range
+         * @param monsterLoc monster's location
+         * @return true - inRange / false - out of range
+         */
         public abstract boolean isInRange(Location monsterLoc);
       
+        /**
+         * Upgrade some value of tower to power up it
+         */
         public abstract void upgrade();
 
     }

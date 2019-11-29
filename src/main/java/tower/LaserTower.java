@@ -10,13 +10,21 @@ import monster.Monster;
         public boolean recharging = false;
         public int[] consumeRate = {100, 100, 100, 50 ,50};
 
+        /**
+         * Construtor of LaserTower
+         * @param x x-coordinate pixel
+         * @param y y-coordinate pixel
+         */
         public LaserTower(int x, int y){
             attackPower = new int[]{10, 12, 14, 14, 16};
             range = 150;
-            upgradeCost = new int[]{80, 100, 120, 130, 150};     
+            upgradeCost = new int[]{80, 100, 120, 130};     
             loc = new Location(x,y);
         }
 
+        /**
+         * Recharge the energy of tower when energy = 0
+         */
         public void recharge(){
             if (energy == 0)
                 recharging = true;
@@ -57,9 +65,9 @@ import monster.Monster;
         }
 
         @Override
-        public Monster findNearestMonster(Monster[] monsters, int size) {
+        public Monster findNearestMonster(Monster[] monsters) {
             if (!isRecharging()){
-                Monster selectedMonster = super.findNearestMonster(monsters, size);
+                Monster selectedMonster = super.findNearestMonster(monsters);
                 if (selectedMonster != null)
                     energy -= consumeRate[level-1];
                     recharge();

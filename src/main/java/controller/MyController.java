@@ -246,7 +246,7 @@ public class MyController {
 
     private void fireAttack() {
         for (int i = 0; i < number_of_tower; i++) {
-            towers[i].attack(monsters, number_of_monster);
+            towers[i].attack(monsters);
         }
     }
 

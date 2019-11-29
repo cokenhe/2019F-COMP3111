@@ -12,17 +12,29 @@ import monster.Monster;
         private int minRange;
         private int maxRange;
 
+        /**
+         * Construtor of CatapultTower
+         * @param x x-coordinate pixel
+         * @param y y-coordinate pixel
+         */
         public CatapultTower(int x, int y){
             attackPower = new int[]{8, 8, 9, 9, 10};
-            upgradeCost = new int[]{50, 50, 70 ,70 ,100};   
+            upgradeCost = new int[]{50, 50, 70 ,100};   
             minRange = 50;
             maxRange = 150;
             coolDownTime = new int[]{3, 2, 2, 1, 0};
             loc = new Location(x,y);
         }
 
+        /**
+         * CoolDown the tower after attack
+         */
         public void coolDown(){
-            coolDownCounter = coolDownTime[level-1];
+            if (coolDownCounter == 0)
+                coolDownCounter = coolDownTime[level-1];
+            else
+                coolDownCounter--;
+
         }
 
         /**
@@ -62,19 +74,21 @@ import monster.Monster;
         @Override
         public boolean isInRange(Location monsterLoc) {
             double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
-            return (distance < maxRange || distance > minRange);
+            return (distance < maxRange && distance > minRange);
         }
 
         @Override
-        public Monster findNearestMonster(Monster[] monsters, int size) {
+        public Monster findNearestMonster(Monster[] monsters) {
             if (coolDownCounter == 0){
-                Monster selectedMonster = super.findNearestMonster(monsters, size);
+                Monster selectedMonster = super.findNearestMonster(monsters);
                 if (selectedMonster != null)
                     coolDown();
                 return selectedMonster;
             }
-            else
+            else{
+                coolDown();
                 return null;
+            }
         }
     }
 
