@@ -6,3 +6,6 @@ build/**
 .settings/
 out/
 out/**
+
+./courseScraper-0.1.0.jar
+courseScraper-0.1.0.jar

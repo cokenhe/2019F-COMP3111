@@ -51,6 +51,9 @@ public class MyController {
     @FXML
     private Label labelMoneyAmount;
 
+    @FXML
+    private Label labelEnergyAmount;
+
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
     private static Random rand = new Random(System.currentTimeMillis());
@@ -76,16 +79,6 @@ public class MyController {
     @FXML
     private void play() {
         System.out.println("Play button clicked");
-
-        Location a = new Location(0, 0);
-        Location b = new Location(1, 1);
-
-        for (int i = -6; i < 6; i+=2) {
-            for (int j = -3; j < 3; j++) {
-                Location l = new Location(i,j);
-                System.out.println(String.format("(%d, %d): " + l.isInRange(a, b), i, j));
-            }
-        }
 
         // Label newLabel = new Label();
         // newLabel.setLayoutX(GRID_WIDTH / 4);
@@ -182,7 +175,7 @@ public class MyController {
      * Setup the styles of UI elements
      */
     private void setStyle() {
-        labelMoneyAmount.setTextFill(Color.YELLOW);
+        labelMoneyAmount.setTextFill(Color.ORANGE);
     }
 
     /**
