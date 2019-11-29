@@ -70,6 +70,14 @@ public class Location extends Point {
         return grids[y / GameConfig.GRID_HEIGHT][x / GameConfig.GRID_WIDTH];
     }
 
+    public int getGridX() {
+        return x / GameConfig.GRID_WIDTH;
+    }
+
+    public int getGridY() {
+        return y / GameConfig.GRID_HEIGHT;
+    }
+
     public double getAngle(Point target) {
         double angle = Math.toDegrees(Math.atan2(target.y - y, target.x - x));
         if (angle < 0)

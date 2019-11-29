@@ -1,7 +1,6 @@
 package tower;
 
 import helper.Location;
-import monster.Monster;
 
 
     public class BasicTower extends Tower{
