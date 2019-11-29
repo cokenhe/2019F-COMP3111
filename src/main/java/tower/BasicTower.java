@@ -4,11 +4,11 @@ import helper.Location;
 import monster.Monster;
 
 
-    abstract public class BasicTower extends Tower{
+    public class BasicTower extends Tower{
 
         public static final int BUILDCOST = 0;
 
-        BasicTower(int x, int y){
+        public BasicTower(int x, int y){
             attackPower = 1;
             range = 65;
             upgradeCost = 1;   

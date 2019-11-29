@@ -9,7 +9,11 @@ public class GameConfig {
     public static final int GRID_WIDTH = 40;
     public static final int GRID_HEIGHT = 40;
     public static final int MAX_H_NUM_GRID = 12;
-    public static final int MAX_MONSTER_NUMBER = 999;
+    public static final int MAX_MONSTER_NUMBER = 200;
+    public static final int MAX_TOWER_NUMBER = 80;
     public static final int MAX_V_NUM_GRID = 12;
     public static final int NO_OF_MONSTER_TYPE = 3;
+
+    // Initial Value
+    public static final int INITIAL_MONEY_BALANCE = 100;
 }

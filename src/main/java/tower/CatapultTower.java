@@ -4,7 +4,7 @@ import helper.Location;
 import monster.Monster;
 
 
-    abstract public class CatapultTower extends Tower{
+    public class CatapultTower extends Tower{
         
         public static final int BUILDCOST = 0;
         private int coolDownTime;
@@ -12,7 +12,7 @@ import monster.Monster;
         private int minRange;
         private int maxRange;
 
-        CatapultTower(int x, int y){
+        public CatapultTower(int x, int y){
             attackPower = 1;
             minRange = 50;
             maxRange = 150;

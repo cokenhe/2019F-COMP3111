@@ -3,14 +3,14 @@ package tower;
 import helper.Location;
 import monster.Monster;
 
-    abstract public class LaserTower extends Tower{
+    public class LaserTower extends Tower{
         
         public static final int BUILDCOST = 0;
         public int energy = 100;
         public boolean isRecharging = false;
         public int[] consumeRate = {100, 100, 100, 50 ,50};
 
-        LaserTower(int x, int y){
+        public LaserTower(int x, int y){
             attackPower = 1;
             upgradeCost = 1;   
             loc = new Location(x,y);

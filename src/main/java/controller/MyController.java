@@ -21,6 +21,7 @@ import java.util.Random;
 
 // MARK: custom classes
 import monster.*;
+import tower.*;
 import helper.Location;
 import helper.GameConfig;
 
@@ -57,21 +58,13 @@ public class MyController {
 
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
+    private static int number_of_tower = 0;
     private static Random rand = new Random(System.currentTimeMillis());
     //private static Tooltip tooltips[][] = new Tooltip[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; 
     private static Monster monsters[] = new Monster[GameConfig.MAX_MONSTER_NUMBER];
+    private static Tower towers[] = new Tower[GameConfig.MAX_TOWER_NUMBER];
     
     private Label grids[][] = new Label[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; //the grids on arena
-    private int x = -1, y = 0;
-    
-    protected enum Direction { //copied to monster
-        DOWNWARD(1), UPWARD(-1);
-        private int value;
-        Direction(int i) {this.value = i; }
-        public int getValue() { return this.value; }
-    }
-
-    private Direction monsterDirection = Direction.DOWNWARD;
 
     /**
      * A dummy function to show how button click works
@@ -109,6 +102,8 @@ public class MyController {
                     newLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
                 else
                     newLabel.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+                
+                newLabel.setId(String.format("%d,%d", i, j));
                 newLabel.setLayoutX(j * GameConfig.GRID_WIDTH);
                 newLabel.setLayoutY(i * GameConfig.GRID_HEIGHT);
                 newLabel.setMinWidth(GameConfig.GRID_WIDTH);
@@ -126,12 +121,13 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        offerResources();         
+        updateResources(150 + number_of_frame * 30);         
         cleanIcon();              //clear all monster's icon
         moveMonster();            //all existing monster move 
         generateMonster();        //gernerate monster every 3 frames
         iconUpdate();             //update icon of monster  
     }
+
     @FXML
     private void generateMonster(){
         if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER){ 
@@ -168,8 +164,12 @@ public class MyController {
     @FXML
     private void cleanIcon(){
         for(int i=0;i<number_of_monster;++i){
-            grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image:none; -fx-border-color: black;");
-            grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(null);
+            Location monster = monsters[i].getLocation();
+            int x = monster.x;
+            int y = monster.y;
+            
+            grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            grids[y][x].setTooltip(null);
         }
     }
     /**
@@ -190,20 +190,55 @@ public class MyController {
     @FXML
     private void iconUpdate(){
         for(int i=0;i<number_of_monster;++i){
-            if(monsters[i].isAlive()){
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));                      
+            Monster monster = monsters[i];
+            int x = monster.getLocation().x;
+            int y = monster.getLocation().y;
+            
+            if(monster.isAlive()){
+                grids[y][x].setStyle("-fx-background-image: url("+monster.getIcon()+"); -fx-background-size:40px 40px;");
+                grids[y][x].setTooltip(new Tooltip("HP:"+monster.getHP()));                      
             }       
-            if(monsters[i].isDying()&&!monsters[i].isAlive()){
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));
-                monsters[i].dead();
+            if(monster.isDying()&&!monster.isAlive()){
+                grids[y][x].setStyle("-fx-background-image: url("+monster.getIcon()+"); -fx-background-size:40px 40px;");
+                grids[y][x].setTooltip(new Tooltip("HP:"+monster.getHP()));
+                monster.dead();
             }       
                             
         }
     }
 
-    private void offerResources() {
+    private void updateResources(int money) {
+        int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
+        moneyBalance += money;
+        labelMoneyAmount.setText(Integer.toString(moneyBalance));
+    }
+
+    private void constructTower(String towerType, int x, int y) {
+        int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
+        int cost = 0;
+
+        if (towerType == "basicTower") {
+            cost = BasicTower.BUILDCOST;
+            if (cost > moneyBalance) return;
+            towers[number_of_tower++] = new BasicTower(x, y);
+        }
+        if (towerType == "catapultTower") {
+            cost = CatapultTower.BUILDCOST;
+            if (cost > moneyBalance) return;
+            towers[number_of_tower++] = new CatapultTower(x, y);
+        }
+        if (towerType == "iceTower") {
+            cost = IceTower.BUILDCOST;
+            if (cost > moneyBalance) return;
+            towers[number_of_tower++] = new IceTower(x, y);
+        }
+        if (towerType == "laserTower") {
+            cost = LaserTower.BUILDCOST;
+            if (cost > moneyBalance) return;
+            towers[number_of_tower++] = new LaserTower(x, y);
+        }
+
+        updateResources(-cost);
 
     }
 
@@ -248,53 +283,56 @@ public class MyController {
                 });
             }
     }
-}
 
-class DragEventHandler implements EventHandler<MouseEvent> {
-    private Label source;
-    public DragEventHandler(Label e) {
-        source = e;
-    }
-    @Override
-    public void handle (MouseEvent event) {
-        Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-        ClipboardContent content = new ClipboardContent();
-        Image image = new Image(source.getId() + ".png");
-        content.putImage(image);
-        content.putString(source.getId());
-        db.setContent(content);
 
-        event.consume();
-    }
-}
-
-class DragDroppedEventHandler implements EventHandler<DragEvent> {
-    @Override
-    public void handle(DragEvent event) {
-        Dragboard db = event.getDragboard();
-        boolean success = false;
-        if (db.hasString() && ((Label)event.getGestureTarget()).getGraphic() == null) {
-            Label target = (Label) event.getGestureTarget();
-            // String style = String.format("-fx-background-image: url(\"%s\"); -fx-background-size:40px 40px;", db.getString() + ".png");
-            target.setText("");
-            // target.setStyle(style);
-            
-            Image image = new Image(db.getString() + ".png", 40, 40, true, true);
-            target.setGraphic(new ImageView(image));
-            target.setMaxSize(40.0, 40.0);
-
-            target.setStyle("-fx-border-color: black;");
-
-            // REMARK: should change to click event, for upgrade tower / destroy
-            target.setOnDragDropped(null);
-            target.setOnDragEntered(null);
-            target.setOnDragOver(null);
-            target.setOnDragExited(null);
-
-            success = true;
+    class DragEventHandler implements EventHandler<MouseEvent> {
+        private Label source;
+        public DragEventHandler(Label e) {
+            source = e;
         }
-        event.setDropCompleted(success);
-        event.consume();
+        @Override
+        public void handle (MouseEvent event) {
+            Dragboard db = source.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            Image image = new Image(source.getId() + ".png");
+            content.putImage(image);
+            content.putString(source.getId());
+            db.setContent(content);
 
+            event.consume();
+        }
     }
+
+    class DragDroppedEventHandler implements EventHandler<DragEvent> {
+        @Override
+        public void handle(DragEvent event) {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasString() && ((Label)event.getGestureTarget()).getGraphic() == null) {
+                Label target = (Label) event.getGestureTarget();
+                target.setText("");
+                
+                String targetLocation = target.getId();
+                int y = Integer.parseInt(targetLocation.split(",")[0]);
+                int x = Integer.parseInt(targetLocation.split(",")[1]);
+                constructTower(db.getString(), x, y);
+                Image image = new Image(db.getString() + ".png", 40, 40, true, true);
+                target.setGraphic(new ImageView(image));
+                target.setMaxSize(40.0, 40.0);
+                target.setStyle("-fx-border-color: black;");
+
+                // REMARK: should change to click event, for upgrade tower / destroy
+                target.setOnDragDropped(null);
+                target.setOnDragEntered(null);
+                target.setOnDragOver(null);
+                target.setOnDragExited(null);
+
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+
+        }
+    }
+
 }
