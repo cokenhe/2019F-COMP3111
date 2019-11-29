@@ -50,7 +50,7 @@ import monster.Monster;
             int[] inRange = new int[monsters.length];
             int numOfInRange = 0;
 
-            for (int i = 0; i < monsters.length; ++i){
+            for (int i = 0; monsters[i] != null; ++i){
                 if (isInRange(monsters[i].getLocation()))
                     inRange[numOfInRange++] = i;
             }
@@ -59,7 +59,7 @@ import monster.Monster;
             
             if (numOfInRange > 1){
                 int nearest = inRange[0];
-                for (int j = 1; j < inRange.length; ++j){
+                for (int j = 1; inRange[j] != 0; ++j){
                     double nearestDistance = Math.sqrt((440 - monsters[inRange[0]].getLocation().x) * (440 - monsters[inRange[0]].getLocation().x) + (0 - monsters[inRange[0]].getLocation().y) * (0 - monsters[inRange[0]].getLocation().y));
                     double newDistance = Math.sqrt((440 - monsters[inRange[j]].getLocation().x) * (440 - monsters[inRange[j]].getLocation().x) + (0 - monsters[inRange[j]].getLocation().y) * (0 - monsters[inRange[j]].getLocation().y));
                     if (nearestDistance > newDistance){
