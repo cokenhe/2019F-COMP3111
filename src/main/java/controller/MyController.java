@@ -4,6 +4,9 @@ package controller;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Alert;
 import javafx.scene.input.*;
 import javafx.event.*;
 import javafx.fxml.FXML;
@@ -16,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.Console;
 // MARK: java 
 import java.util.Random;
 
@@ -54,10 +58,10 @@ public class MyController {
 
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
+    private static boolean isGameEnd = false;
     private static Random rand = new Random(System.currentTimeMillis());
-    //private static Tooltip tooltips[][] = new Tooltip[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; 
     private static Monster monsters[] = new Monster[GameConfig.MAX_MONSTER_NUMBER];
-    
+    private static Alert endGameDialog = new Alert(AlertType.INFORMATION);
     private Label grids[][] = new Label[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
     
@@ -126,22 +130,28 @@ public class MyController {
                 grids[i][j] = newLabel;
                 paneArena.getChildren().addAll(newLabel);
             }
-
         setStyle();
         setDragAndDrop();
     }
 
     @FXML
     private void nextFrame() {
-        offerResources();         
-        cleanIcon();              //clear all monster's icon
-        moveMonster();            //all existing monster move 
-        generateMonster();        //gernerate monster every 3 frames
-        iconUpdate();             //update icon of monster  
+        if(!isGameEnd){
+            offerResources();         
+            cleanIcon();              //clear all monster's icon
+            moveMonster();            //all existing monster move 
+            generateMonster();        //gernerate monster every 3 frames
+            iconUpdate();             //update icon of monster  
+            checkEndGame();
+        }
+        else{
+            endGameDialog.showAndWait().ifPresent((btnType) -> {
+            });
+        }
     }
     @FXML
     private void generateMonster(){
-        if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER){ 
+        if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER ){ 
             switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
                 case 0:
                     monsters[number_of_monster++] = new Fox(number_of_frame);
@@ -210,6 +220,22 @@ public class MyController {
         }
     }
 
+    /**
+     * all monster still alive will call move() acoording to its'speed times, the icon will not change yet.
+     */
+    @FXML
+    private void checkEndGame(){
+        for(int i=0;i<number_of_monster;++i){
+            if(monsters[i].isReachEndZone()){
+                endGameDialog.setTitle("Game Over");
+                endGameDialog.setHeaderText("A monster reached the end-zone");
+                endGameDialog.showAndWait().ifPresent((btnType) -> {
+                });
+                isGameEnd = true;
+                System.out.println("Gameover");
+            }       
+        }
+    }
     private void offerResources() {
 
     }

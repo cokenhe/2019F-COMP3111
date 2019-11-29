@@ -12,6 +12,7 @@ public class Monster {
         protected boolean dying; //the situation which alive == false in the current round, but still need to display collision.png 
         protected Location location;
         protected int reward;
+        protected boolean reachEndZone;
         protected enum Direction {
             DOWNWARD(1), UPWARD(-1);
             private int value;
@@ -25,7 +26,8 @@ public class Monster {
             hp=5;   
             speed =1; 
             alive = true;
-            dying = false; 
+            dying = false;
+            reachEndZone=false;
             icon="";
         }
         public void move(){ 
@@ -36,6 +38,10 @@ public class Monster {
             }
             // When col is odd, move to right
             if (location.x % 2 == 1 || (dir == Direction.DOWNWARD && location.y == GameConfig.MAX_V_NUM_GRID - 1) || (dir == Direction.UPWARD && location.y == 0)){
+                if(location.x+1>=GameConfig.MAX_H_NUM_GRID){ //monster reach end-zone, end game
+                    this.reachEndZone = true;
+                    return;
+                }
                 ++location.x;
                 dir = (location.y == 0)? Direction.DOWNWARD : 
                     (location.y == GameConfig.MAX_V_NUM_GRID - 1) ? Direction.UPWARD   : dir;
@@ -77,6 +83,9 @@ public class Monster {
         }
         public int getReward() {
             return this.reward;
+        }
+        public boolean isReachEndZone(){
+            return this.reachEndZone;
         }
         
     }
