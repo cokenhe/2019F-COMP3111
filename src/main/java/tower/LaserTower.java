@@ -5,14 +5,15 @@ import monster.Monster;
 
     abstract public class LaserTower extends Tower{
         
-        public static final int BUILDCOST = 0;
+        public static final int BUILDCOST = 200;
         public int energy = 100;
         public boolean isRecharging = false;
         public int[] consumeRate = {100, 100, 100, 50 ,50};
 
         LaserTower(int x, int y){
-            attackPower = 1;
-            upgradeCost = 1;   
+            attackPower = new int[]{10, 12, 14, 14, 16};
+            range = 150;
+            upgradeCost = new int[]{80, 100, 120, 130, 150};     
             loc = new Location(x,y);
         }
 
@@ -27,7 +28,6 @@ import monster.Monster;
         public void upgrade(){
             if (level >= 5) return;
             level++;
-            attackPower++; 
         }
 
         @Override
@@ -41,6 +41,7 @@ import monster.Monster;
                 Monster selectedMonster = super.findNearestMonster(monsters);
                 if (selectedMonster != null)
                     energy -= consumeRate[level-1];
+                    recharge();
                 return selectedMonster;
             }else{
                 recharge();

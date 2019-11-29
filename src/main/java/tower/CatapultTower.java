@@ -6,22 +6,23 @@ import monster.Monster;
 
     abstract public class CatapultTower extends Tower{
         
-        public static final int BUILDCOST = 0;
-        private int coolDownTime;
-        private int coolDownCounter;
+        public static final int BUILDCOST = 150;
+        private int[] coolDownTime;
+        private int coolDownCounter = 0;
         private int minRange;
         private int maxRange;
 
         CatapultTower(int x, int y){
-            attackPower = 1;
+            attackPower = new int[]{8, 8, 9, 9, 10};
+            upgradeCost = new int[]{50, 50, 70 ,70 ,100};   
             minRange = 50;
             maxRange = 150;
-            upgradeCost = 1;   
+            coolDownTime = new int[]{3, 2, 2, 1, 0};
             loc = new Location(x,y);
         }
 
         public void coolDown(){
-            coolDownCounter = coolDownTime;
+            coolDownCounter = coolDownTime[level-1];
         }
 
         /**
@@ -49,14 +50,13 @@ import monster.Monster;
          * @return the coolDownTime
          */
         public int getCoolDownTime() {
-            return coolDownTime;
+            return coolDownTime[level-1];
         }
-        
+
         @Override
         public void upgrade(){
             if (level >= 5) return;
             level++;
-            coolDownTime--; 
         }
 
         @Override
