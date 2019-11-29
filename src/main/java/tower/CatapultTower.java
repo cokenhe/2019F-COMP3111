@@ -12,6 +12,11 @@ import monster.Monster;
         private int minRange;
         private int maxRange;
 
+        /**
+         * Construtor of CatapultTower
+         * @param x x-coordinate pixel
+         * @param y y-coordinate pixel
+         */
         public CatapultTower(int x, int y){
             attackPower = new int[]{8, 8, 9, 9, 10};
             upgradeCost = new int[]{50, 50, 70 ,100};   
@@ -21,6 +26,9 @@ import monster.Monster;
             loc = new Location(x,y);
         }
 
+        /**
+         * CoolDown the tower after attack
+         */
         public void coolDown(){
             if (coolDownCounter == 0)
                 coolDownCounter = coolDownTime[level-1];

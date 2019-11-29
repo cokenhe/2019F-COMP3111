@@ -43,7 +43,7 @@ import monster.Monster;
         /**
          * Find the Monster nearest to End-Zone in attack range
          * @param monsters Array of the monster in Arena
-         * @return 
+         * @return the nearest monster
          */
         public Monster findNearestMonster(Monster[] monsters){
 
@@ -72,14 +72,26 @@ import monster.Monster;
                 return monsters[inRange[0]];
         }
 
+        /**
+         * Find a monster to attack
+         * @param monsters Monsters in the Arena
+         */
         public void attack(Monster[] monsters){
             Monster selectedMonster = findNearestMonster(monsters);
             if (selectedMonster != null)
                 selectedMonster.reduceHP(attackPower[level-1]);
         }
 
+        /**
+         * Check if the monster is in the attack range
+         * @param monsterLoc monster's location
+         * @return true - inRange / false - out of range
+         */
         public abstract boolean isInRange(Location monsterLoc);
       
+        /**
+         * Upgrade some value of tower to power up it
+         */
         public abstract void upgrade();
 
     }

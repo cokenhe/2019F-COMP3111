@@ -10,6 +10,11 @@ import monster.Monster;
         public boolean recharging = false;
         public int[] consumeRate = {100, 100, 100, 50 ,50};
 
+        /**
+         * Construtor of LaserTower
+         * @param x x-coordinate pixel
+         * @param y y-coordinate pixel
+         */
         public LaserTower(int x, int y){
             attackPower = new int[]{10, 12, 14, 14, 16};
             range = 150;
@@ -17,6 +22,9 @@ import monster.Monster;
             loc = new Location(x,y);
         }
 
+        /**
+         * Recharge the energy of tower when energy = 0
+         */
         public void recharge(){
             if (energy == 0)
                 recharging = true;

@@ -8,6 +8,11 @@ public class IceTower extends Tower{
     public static final int BUILDCOST = 60;
     public int[] slowDuration = {2, 2, 3, 3, 4};
 
+    /**
+         * Construtor of IceTower
+         * @param x x-coordinate pixel
+         * @param y y-coordinate pixel
+         */
     public IceTower(int x, int y){
         attackPower = new int[]{1, 1, 2, 2, 3};
         range = 65;
@@ -23,6 +28,9 @@ public class IceTower extends Tower{
     }
     
     @Override
+    /**
+     * slow the monster also
+     */
     public void attack(Monster[] monsters) {
         Monster selectedMonster = findNearestMonster(monsters);
             if (selectedMonster != null){
@@ -31,6 +39,7 @@ public class IceTower extends Tower{
             }
 
     }
+
     @Override
     public void upgrade(){
         if (level >= MAXLEVEL) return;
