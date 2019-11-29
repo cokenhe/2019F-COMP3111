@@ -98,7 +98,7 @@ public class Monster {
             return this.slowDuration;
         }        
         public void slow(int duration){ //slow how many duraiton
-            this.slowDuration = slowDuration + duration;
+            this.slowDuration = duration;
             this.speed/=2;
         }        
     }
