@@ -12,34 +12,30 @@ import monster.Monster;
         protected Location loc;
 
         /**
-         * Get the Tower's attack power
-         * @return 
+         * @return the attackPower
          */
-        public int getAttackPower(){
-            return this.attackPower;
+        public int getAttackPower() {
+            return attackPower;
         }
 
         /**
-         * Get the Tower's attack range
-         * @return 
+         * @return the range
          */
-        public int getRange(){
-            return this.range;
+        public int getRange() {
+            return range;
         }
 
         /**
-         * Get the Tower's upgrade cost
-         * @return
+         * @return the upgradeCost
          */
-        public int getUpgradeCost(){
-            return this.upgradeCost;
+        public int getUpgradeCost() {
+            return upgradeCost;
         }
 
         /**
-         * Get the Tower's location
-         * @return
+         * @return the location
          */
-        public Location getLocation(){
+        public Location getLocation() {
             return loc;
         }
 
@@ -76,7 +72,9 @@ import monster.Monster;
         }
 
         public void attack(Monster[] monsters){
-            findNearestMonster(monsters).reduceHP(attackPower);
+            Monster selectedMonster = findNearestMonster(monsters);
+            if (selectedMonster != null)
+                selectedMonster.reduceHP(attackPower);
         }
 
         public abstract boolean isInRange(Location monsterLoc);

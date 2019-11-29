@@ -6,6 +6,7 @@ import monster.Monster;
 public class IceTower extends Tower{
     
     public static final int BUILDCOST = 0;
+    public static int slowDuration = 2;
 
     public IceTower(int x, int y){
         attackPower = 1;
@@ -14,18 +15,17 @@ public class IceTower extends Tower{
         loc = new Location(x,y);
     }
 
-    public void attack(Monster monsters){
-
-    }
-
+    @Override
     public void upgrade(){
-
+        if (level >= 5) return;
+            level++;
+            slowDuration++; 
     }
 
     @Override
     public boolean isInRange(Location monsterLoc) {
-        // TODO Auto-generated method stub
-        return false;
+        double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
+        return (distance <= range);
     }
 
 }

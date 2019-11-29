@@ -22,7 +22,7 @@ import monster.Monster;
 
         public boolean isInRange(Location monsterLoc){
             double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
-            return (distance <= 65);
+            return (distance <= range);
         }
     }
 
