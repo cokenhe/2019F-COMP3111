@@ -15,6 +15,13 @@ public class IceTower extends Tower{
         loc = new Location(x,y);
     }
 
+    /**
+     * @return the slowDuration
+     */
+    public static int[] getSlowDuration() {
+        return slowDuration;
+    }
+    
     @Override
     public void upgrade(){
         if (level >= MAXLEVEL) return;

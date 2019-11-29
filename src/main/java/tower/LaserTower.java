@@ -7,7 +7,7 @@ import monster.Monster;
         
         public static final int BUILDCOST = 200;
         public int energy = 100;
-        public boolean isRecharging = false;
+        public boolean recharging = false;
         public int[] consumeRate = {100, 100, 100, 50 ,50};
 
         LaserTower(int x, int y){
@@ -19,9 +19,30 @@ import monster.Monster;
 
         public void recharge(){
             if (energy == 0)
-                isRecharging = true;
-            if (isRecharging)
+                recharging = true;
+            if (recharging)
                 energy += 20;
+        }
+
+        /**
+         * @return the energy
+         */
+        public int getEnergy() {
+            return energy;
+        }
+
+        /**
+         * @return the consumeRate
+         */
+        public int getConsumeRate() {
+            return consumeRate[level-1];
+        }
+
+        /**
+         * @return the isRecharging
+         */
+        public boolean isRecharging() {
+            return recharging;
         }
 
         @Override
@@ -37,7 +58,7 @@ import monster.Monster;
 
         @Override
         public Monster findNearestMonster(Monster[] monsters) {
-            if (!isRecharging){
+            if (!isRecharging()){
                 Monster selectedMonster = super.findNearestMonster(monsters);
                 if (selectedMonster != null)
                     energy -= consumeRate[level-1];
