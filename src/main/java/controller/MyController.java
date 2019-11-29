@@ -3,6 +3,7 @@ package controller;
 // MARK: javafx
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.*;
 import javafx.event.*;
 import javafx.fxml.FXML;
@@ -26,7 +27,7 @@ import helper.GameConfig;
 public class MyController {
     @FXML
     private Button buttonNextFrame;
-
+    
     @FXML
     private Button buttonSimulate;
 
@@ -54,9 +55,9 @@ public class MyController {
     private static int number_of_frame = 0;
     private static int number_of_monster = 0;
     private static Random rand = new Random(System.currentTimeMillis());
-    
+    //private static Tooltip tooltips[][] = new Tooltip[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; 
     private static Monster monsters[] = new Monster[GameConfig.MAX_MONSTER_NUMBER];
-
+    
     private Label grids[][] = new Label[GameConfig.MAX_V_NUM_GRID][GameConfig.MAX_H_NUM_GRID]; //the grids on arena
     private int x = -1, y = 0;
     
@@ -76,7 +77,7 @@ public class MyController {
     @FXML
     private void play() {
         System.out.println("Play button clicked");
-
+        
         Location a = new Location(0, 0);
         Location b = new Location(1, 1);
 
@@ -140,7 +141,7 @@ public class MyController {
     }
     @FXML
     private void generateMonster(){
-        if(number_of_frame++ % 3 == 0){ 
+        if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER){ 
             switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
                 case 0:
                     monsters[number_of_monster++] = new Fox(number_of_frame);
@@ -152,6 +153,19 @@ public class MyController {
                     monsters[number_of_monster++] = new Penguim(number_of_frame);
                     break;
             }
+            if(rand.nextInt(100)%5==0){ //20% chance to generate an extra monster
+                switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
+                    case 0:
+                        monsters[number_of_monster++] = new Fox(number_of_frame);
+                        break;
+                    case 1:
+                        monsters[number_of_monster++] = new Unicorn(number_of_frame);
+                        break;
+                    case 2:
+                        monsters[number_of_monster++] = new Penguim(number_of_frame);
+                        break;
+                }   
+            }
         }
     }
     
@@ -162,6 +176,7 @@ public class MyController {
     private void cleanIcon(){
         for(int i=0;i<number_of_monster;++i){
             grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(null);
         }
     }
     /**
@@ -182,8 +197,16 @@ public class MyController {
     @FXML
     private void iconUpdate(){
         for(int i=0;i<number_of_monster;++i){
-            if(monsters[i].isAlive())       
+            if(monsters[i].isAlive()){
                 grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));                      
+            }       
+            if(monsters[i].isDying()&&!monsters[i].isAlive()){
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));
+                monsters[i].dead();
+            }       
+                            
         }
     }
 
