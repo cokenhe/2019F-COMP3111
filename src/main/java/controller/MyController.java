@@ -132,45 +132,58 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        offerResources();
-
-        //gernerate monster every 3 frames
-        if(number_of_frame++ % 3 == 0){ 
-            generateMonster();
-        }
-
-        // Initial position
-        if (x == -1) {
-            grids[0][0].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
-            x = 0;
-            return; 
-        }
-
-        grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
-
-        // When col is odd || moved to top / bottom, then move to right
-        if (x % 2 == 1 || (monsterDirection == Direction.DOWNWARD && y == GameConfig.MAX_V_NUM_GRID - 1) || (monsterDirection == Direction.UPWARD && y == 0)){
-            x += 1;
-            if (y == 0)                  monsterDirection = Direction.DOWNWARD;
-            if (y == GameConfig.MAX_V_NUM_GRID - 1) monsterDirection = Direction.UPWARD;
-        } else // Moving up / down
-            y += monsterDirection.getValue();
-
-        grids[y][x].setStyle("-fx-background-image: url(\"fox.png\"); -fx-background-size:40px 40px;");
+        offerResources();         
+        cleanIcon();              //clear all monster's icon
+        moveMonster();            //all existing monster move 
+        generateMonster();        //gernerate monster every 3 frames
+        iconUpdate();             //update icon of monster  
     }
-
     @FXML
     private void generateMonster(){
-        switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
-            case 1:
-                monsters[number_of_monster++] = new Fox(number_of_frame);
-                break;
-            case 2:
-                monsters[number_of_monster++] = new Unicorn(number_of_frame);
-                break;
-            case 3:
-                monsters[number_of_monster++] = new Penguim(number_of_frame);
-                break;
+        if(number_of_frame++ % 3 == 0){ 
+            switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
+                case 0:
+                    monsters[number_of_monster++] = new Fox(number_of_frame);
+                    break;
+                case 1:
+                    monsters[number_of_monster++] = new Unicorn(number_of_frame);
+                    break;
+                case 2:
+                    monsters[number_of_monster++] = new Penguim(number_of_frame);
+                    break;
+            }
+        }
+    }
+    
+    /**
+     * clean the icon of monster in the whole arena
+     */
+    @FXML
+    private void cleanIcon(){
+        for(int i=0;i<number_of_monster;++i){
+            grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+        }
+    }
+    /**
+     * all monster still alive will call move() acoording to its'speed times, the icon will not change yet.
+     */
+    @FXML
+    private void moveMonster(){
+        for(int i=0;i<number_of_monster;++i){
+            if(monsters[i].isAlive()){
+                for(int j=0;j<monsters[i].getSpeed();++j)
+                    monsters[i].move();
+            }       
+        }
+    }
+    /**
+     * update the icon of living monster in the whole arena
+     */
+    @FXML
+    private void iconUpdate(){
+        for(int i=0;i<number_of_monster;++i){
+            if(monsters[i].isAlive())       
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
         }
     }
 
