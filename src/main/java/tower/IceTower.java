@@ -6,7 +6,7 @@ import monster.Monster;
 public class IceTower extends Tower{
     
     public static final int BUILDCOST = 60;
-    public static int[] slowDuration = {2, 2, 3, 3, 4};
+    public int[] slowDuration = {2, 2, 3, 3, 4};
 
     public IceTower(int x, int y){
         attackPower = new int[]{1, 1, 2, 2, 3};
@@ -18,8 +18,8 @@ public class IceTower extends Tower{
     /**
      * @return the slowDuration
      */
-    public static int[] getSlowDuration() {
-        return slowDuration;
+    public int getSlowDuration() {
+        return slowDuration[level-1];
     }
     
     @Override
