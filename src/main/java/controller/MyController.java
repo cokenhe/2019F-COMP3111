@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
 import javafx.scene.input.*;
 import javafx.event.*;
@@ -86,19 +85,6 @@ public class MyController {
     @FXML
     private void play() {
         System.out.println("Play button clicked");
-
-        // Label newLabel = new Label();
-        // newLabel.setLayoutX(GRID_WIDTH / 4);
-        // newLabel.setLayoutY(GRID_WIDTH / 4);
-        // newLabel.setMinWidth(GRID_WIDTH / 2);
-        // newLabel.setMaxWidth(GRID_WIDTH / 2);
-        // newLabel.setMinHeight(GRID_WIDTH / 2);
-        // newLabel.setMaxHeight(GRID_WIDTH / 2);
-        // newLabel.setStyle("-fx-border-color: black;");
-        // newLabel.setText("*");
-        // newLabel.setBackground(new Background(new BackgroundFill(Color.YELLOW,
-        // CornerRadii.EMPTY, Insets.EMPTY)));
-        // paneArena.getChildren().addAll(newLabel);
     }
 
     /**
@@ -133,19 +119,18 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if(!isGameEnd){               //the game still not end
-            updateResources(150 + number_of_frame * 30);            
-            cleanIcon();              //clear all monster's icon
-            moveMonster();            //all existing monster move 
-            fireAttack();
-            generateMonster();        //gernerate monster every 3 frames
-            iconUpdate();             //update icon of monster  
+        cancelAction();               // de-select tower
+        if(!isGameEnd){               // the game still not end
+            updateResources(150 + number_of_frame * 30);       // give money to player every frame     
+            cleanIcon();              // clear all monster's icon
+            moveMonster();            // all existing monster move 
+            fireAttack();             // tower fire to monster
+            generateMonster();        // gernerate monster every 3 frames
+            iconUpdate();             // update icon of monster  
             checkEndGame();
         }
-        else{
-            endGameDialog.showAndWait().ifPresent((btnType) -> {    //show dialog to say game over
-            });
-        }
+        else
+            endGameDialog.showAndWait().ifPresent((btnType) -> {});    //show dialog to say game over   
     }
 
     @FXML 
@@ -156,18 +141,40 @@ public class MyController {
             alert.setTitle("Warning");
             alert.setHeaderText("Not enough money");
             alert.showAndWait().ifPresent((btnType) -> {});
+            return;
         }
         
+        updateResources(-this.selectedTower.getUpgradeCost());
         this.selectedTower.upgrade();
+
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Infomation");
         alert.setHeaderText("Tower upgrade successfully");
         alert.showAndWait().ifPresent((btnType) -> {});
+
+        grids[selectedY][selectedX].setTooltip(new Tooltip(
+            "Attack Power:\t" + selectedTower.getAttackPower() + "\n" +
+            "Attack Range:\t" + selectedTower.getRange() + "\n" +
+            "Upgrade Cost:\t$" + selectedTower.getUpgradeCost()
+        ));
     }
 
     @FXML 
     private void destroyTower() {
+        boolean found = false;
+        for (int i = 0; i < number_of_tower; i++) {
+            if (towers[i] == selectedTower) {
+                number_of_tower -= 1;
+                found = true;
+            }
 
+            if (found) towers[i] = towers[i + 1];
+        }              
+                
+        grids[selectedY][selectedX].setGraphic(null);
+        grids[selectedY][selectedX].setOnMouseClicked(null);
+        setHandler(selectedX, selectedY);
+        cancelAction();
     }
 
     @FXML
@@ -179,7 +186,7 @@ public class MyController {
         for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
             for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
                 Label target = grids[i][j];
-                if (target.getBackground().getFills().get(0).getFill() == Color.YELLOW) {
+                if (target != null && target.getBackground() != null && target.getBackground().getFills().size() > 0 && target.getBackground().getFills().get(0).getFill() == Color.YELLOW) {
                     if (selectedTower.isInRange(new Location(i, j))) {
                         target.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
                     }
@@ -227,7 +234,9 @@ public class MyController {
             int x = monster.x;
             int y = monster.y;
             
-            grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            // grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
+            grids[y][x].setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+            grids[y][x].setGraphic(null);
             grids[y][x].setTooltip(null);
         }
     }
@@ -261,11 +270,19 @@ public class MyController {
             int y = monster.getLocation().y;
 
             if(monsters[i].isAlive()){
-                grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
+                grids[y][x].setGraphic(new ImageView(image));
+                grids[y][x].setMaxSize(40.0, 40.0);
+                
                 grids[y][x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));                      
             }       
             if(monsters[i].isDying()&&!monsters[i].isAlive()){
-                grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
+                grids[y][x].setGraphic(new ImageView(image));
+                grids[y][x].setMaxSize(40.0, 40.0);
+
                 grids[y][x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));
                 monsters[i].dead();
                 updateResources(monsters[i].getReward());
@@ -289,21 +306,28 @@ public class MyController {
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new BasicTower(x, y);
         }
-        if (towerType.compareTo("catapultTower") == 0) {
+        else if (towerType.compareTo("catapult") == 0) {
             cost = CatapultTower.BUILDCOST;
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new CatapultTower(x, y);
         }
-        if (towerType.compareTo("iceTower") == 0) {
+        else if (towerType.compareTo("iceTower") == 0) {
             cost = IceTower.BUILDCOST;
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new IceTower(x, y);
         }
-        if (towerType.compareTo("laserTower") == 0) {
+        else if (towerType.compareTo("laserTower") == 0) {
             cost = LaserTower.BUILDCOST;
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new LaserTower(x, y);
         }
+        else return false;
+
+        grids[y][x].setTooltip(new Tooltip(
+            "Attack Power: " + towers[number_of_tower - 1].getAttackPower() + "\n" +
+            "Attack Range: " + towers[number_of_tower - 1].getRange() + "\n" +
+            "Upgrade Cost: $" + towers[number_of_tower - 1].getUpgradeCost()
+        ));
         updateResources(-cost);
         return true;
     }
@@ -344,29 +368,32 @@ public class MyController {
         labelLaserTower.setOnDragDetected(new DragEventHandler(labelLaserTower));
 
         for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
-            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
-                Label target = grids[i][j];
-                if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) continue;
+            for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) 
+                setHandler(j, i);
+    }
 
-                target.setOnDragEntered((event) -> {
-                    if (event.getGestureSource() != target && event.getDragboard().hasString()) 
-                        target.setStyle("-fx-border-color: red;");
-                    event.consume();
-                });
+    private void setHandler(int x, int y) {
+        Label target = grids[y][x];
+        if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) return;
 
-                target.setOnDragOver((event) -> {
-                    if (event.getGestureSource() != target && event.getDragboard().hasString()) 
-                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                    event.consume();
-                });
+        target.setOnDragEntered((event) -> {
+            if (event.getGestureSource() != target && event.getDragboard().hasString()) 
+                target.setStyle("-fx-border-color: red;");
+            event.consume();
+        });
 
-                target.setOnDragDropped(new DragDroppedEventHandler());
+        target.setOnDragOver((event) -> {
+            if (event.getGestureSource() != target && event.getDragboard().hasString()) 
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            event.consume();
+        });
 
-                target.setOnDragExited((event) -> {
-                    target.setStyle("-fx-border-color: black;");
-                    event.consume();
-                });
-            }
+        target.setOnDragDropped(new DragDroppedEventHandler());
+
+        target.setOnDragExited((event) -> {
+            target.setStyle("-fx-border-color: black;");
+            event.consume();
+        });
     }
 
 
@@ -465,7 +492,7 @@ public class MyController {
             for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
                 for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
                     Label target = grids[i][j];
-                    if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) {
+                    if (target != null && target.getBackground() != null && target.getBackground().getFills().size() > 0 && target.getBackground().getFills().get(0).getFill() == Color.WHITE) {
                         if (selectedTower.isInRange(new Location(i, j))) {
                             target.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
                         }
