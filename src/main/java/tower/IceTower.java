@@ -5,21 +5,27 @@ import monster.Monster;
 
 public class IceTower extends Tower{
     
-    public static final int BUILDCOST = 0;
-    public static int slowDuration = 2;
+    public static final int BUILDCOST = 60;
+    public static int[] slowDuration = {2, 2, 3, 3, 4};
 
     public IceTower(int x, int y){
-        attackPower = 1;
+        attackPower = new int[]{1, 1, 2, 2, 3};
         range = 65;
-        upgradeCost = 1;   
+        upgradeCost = new int[]{20, 20, 30 ,30 ,30};   
         loc = new Location(x,y);
     }
 
+    /**
+     * @return the slowDuration
+     */
+    public static int[] getSlowDuration() {
+        return slowDuration;
+    }
+    
     @Override
     public void upgrade(){
-        if (level >= 5) return;
+        if (level >= MAXLEVEL) return;
             level++;
-            slowDuration++; 
     }
 
     @Override

@@ -5,17 +5,18 @@ import monster.Monster;
 
     abstract public class Tower {
         
-        protected int attackPower;
+        protected int[] attackPower;
         protected int range;
-        protected int upgradeCost;
+        protected int[] upgradeCost;
         protected int level = 1;
+        protected final int MAXLEVEL = 5;
         protected Location loc;
 
         /**
          * @return the attackPower
          */
         public int getAttackPower() {
-            return attackPower;
+            return attackPower[level-1];
         }
 
         /**
@@ -29,7 +30,7 @@ import monster.Monster;
          * @return the upgradeCost
          */
         public int getUpgradeCost() {
-            return upgradeCost;
+            return upgradeCost[level-1];
         }
 
         /**
@@ -74,7 +75,7 @@ import monster.Monster;
         public void attack(Monster[] monsters){
             Monster selectedMonster = findNearestMonster(monsters);
             if (selectedMonster != null)
-                selectedMonster.reduceHP(attackPower);
+                selectedMonster.reduceHP(attackPower[level-1]);
         }
 
         public abstract boolean isInRange(Location monsterLoc);
