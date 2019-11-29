@@ -48,16 +48,37 @@ public void testBasicTowerAttack() {
 public void testCatapultTowerAttack() {
     Tower catapultTower = new CatapultTower(0,51);
     Tower catapultTowerB = new CatapultTower(400,400);
+    Tower catapultTowerC = new CatapultTower(0,0);
     Monster[] inRangeMonsters = new Monster[5];
     inRangeMonsters[0] = new Fox(0);
     Monster[] outRangeMonsters = new Monster[5];
     outRangeMonsters[0] = new Fox(0);
     catapultTower.attack(inRangeMonsters);
     catapultTowerB.attack(outRangeMonsters);
+    catapultTowerC.attack(outRangeMonsters);
     inRangeMonsters[2] = new Fox(0);
     inRangeMonsters[1] = new Fox(0);
     for (int i = 0; i < 24; ++i)
         inRangeMonsters[2].move();
     catapultTower.attack(inRangeMonsters);
+}
+
+@Test
+public void testLaserTowerAttack() {
+    Tower laserTower = new LaserTower(0,100);
+    Tower laserTowerB = new LaserTower(400,400);
+    Tower laserTowerC = new LaserTower(0,0);
+    Monster[] inRangeMonsters = new Monster[5];
+    inRangeMonsters[0] = new Fox(0);
+    Monster[] outRangeMonsters = new Monster[5];
+    outRangeMonsters[0] = new Fox(0);
+    laserTower.attack(inRangeMonsters);
+    laserTowerB.attack(outRangeMonsters);
+    laserTowerC.attack(outRangeMonsters);
+    inRangeMonsters[2] = new Fox(0);
+    inRangeMonsters[1] = new Fox(0);
+    for (int i = 0; i < 24; ++i)
+        inRangeMonsters[2].move();
+    laserTower.attack(inRangeMonsters);
 }
 }

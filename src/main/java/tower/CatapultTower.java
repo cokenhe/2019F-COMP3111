@@ -14,7 +14,7 @@ import monster.Monster;
 
         public CatapultTower(int x, int y){
             attackPower = new int[]{8, 8, 9, 9, 10};
-            upgradeCost = new int[]{50, 50, 70 ,70 ,100};   
+            upgradeCost = new int[]{50, 50, 70 ,100};   
             minRange = 50;
             maxRange = 150;
             coolDownTime = new int[]{3, 2, 2, 1, 0};

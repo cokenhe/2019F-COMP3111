@@ -10,7 +10,7 @@ import helper.Location;
         public BasicTower(int x, int y){
             attackPower = new int[]{5, 6, 7, 8, 9};
             range = 65;
-            upgradeCost = new int[]{20, 20, 30 ,30 ,30};   
+            upgradeCost = new int[]{20, 20, 30 ,30};   
             loc = new Location(x,y);
         }
         public void upgrade(){
