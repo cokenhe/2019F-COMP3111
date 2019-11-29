@@ -53,7 +53,7 @@ public void testCatapultTowerAttack() {
     Monster[] outRangeMonsters = new Monster[5];
     outRangeMonsters[0] = new Fox(0);
     catapultTower.attack(inRangeMonsters);
-    catapultTowerB.attack(outRangeMonster
+    catapultTowerB.attack(outRangeMonsters);
     inRangeMonsters[2] = new Fox(0);
     inRangeMonsters[1] = new Fox(0);
     for (int i = 0; i < 24; ++i)
