@@ -9,7 +9,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert;
 import javafx.scene.input.*;
 import javafx.event.*;
-import javafx.fxml.FXML;
+import javafx.fxml.FXML;    
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -129,7 +129,7 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        if(!isGameEnd){
+        if(!isGameEnd){               //the game still not end
             offerResources();         
             cleanIcon();              //clear all monster's icon
             moveMonster();            //all existing monster move 
@@ -138,7 +138,7 @@ public class MyController {
             checkEndGame();
         }
         else{
-            endGameDialog.showAndWait().ifPresent((btnType) -> {
+            endGameDialog.showAndWait().ifPresent((btnType) -> {    //show dialog to say game over
             });
         }
     }
@@ -202,11 +202,11 @@ public class MyController {
         for(int i=0;i<number_of_monster;++i){
             if(monsters[i].isAlive()){
                 grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));                      
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));                      
             }       
             if(monsters[i].isDying()&&!monsters[i].isAlive()){
                 grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP:"+monsters[i].getHP()));
+                grids[monsters[i].getLocation().y][monsters[i].getLocation().x].setTooltip(new Tooltip("HP: "+monsters[i].getHP()));
                 monsters[i].dead();
             }       
                             
@@ -220,7 +220,7 @@ public class MyController {
     private void checkEndGame(){
         for(int i=0;i<number_of_monster;++i){
             if(monsters[i].isReachEndZone()){
-                endGameDialog.setTitle("Game Over");
+                endGameDialog.setTitle("The game is over");
                 endGameDialog.setHeaderText("A monster reached the end-zone");
                 endGameDialog.showAndWait().ifPresent((btnType) -> {
                 });
