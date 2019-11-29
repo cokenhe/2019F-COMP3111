@@ -23,6 +23,15 @@ public class IceTower extends Tower{
     }
     
     @Override
+    public void attack(Monster[] monsters) {
+        Monster selectedMonster = findNearestMonster(monsters);
+            if (selectedMonster != null){
+                selectedMonster.reduceHP(attackPower[level-1]);
+                selectedMonster.slow(slowDuration[level-1]);
+            }
+
+    }
+    @Override
     public void upgrade(){
         if (level >= MAXLEVEL) return;
             level++;
