@@ -1,11 +1,13 @@
 package monster;
 
 import helper.Location;
+import sun.security.provider.JavaKeyStore.DualFormatJKS;
 import helper.GameConfig;
 
 public class Monster {
         
         protected int hp;
+        protected int oriSpeed;
         protected int speed;   //how many times need to call move() per 1 frames
         protected String icon; //the name of the image 
         protected boolean alive;
@@ -13,7 +15,7 @@ public class Monster {
         protected Location location;
         protected int reward;
         protected boolean reachEndZone;
-        protected String status;
+        protected int slowDuration;
         protected enum Direction {
             DOWNWARD(1), UPWARD(-1);
             private int value;
@@ -25,14 +27,18 @@ public class Monster {
             location = new Location(0,0);
             dir=Direction.DOWNWARD;
             hp=5;   
-            speed =1; 
+            speed =1;
+            oriSpeed = speed; 
             alive = true;
             dying = false;
             reachEndZone=false;
             icon="";
+            slowDuration = 0;
         }
         public void move(){ 
-                
+            //still under slow?
+            if(slowDuration--==0) //slow period end, recover
+                speed = oriSpeed;
             // Initial position
             if (location.x == -1) {
                 return; 
@@ -73,6 +79,7 @@ public class Monster {
         public int getSpeed(){
             return this.speed;
         }
+        
         public boolean isAlive(){
             return this.alive;
         }
@@ -88,11 +95,12 @@ public class Monster {
         public boolean isReachEndZone(){
             return this.reachEndZone;
         }
-        public String getStatus(){
-            return status;
+        public int getslowDuration(){
+            return this.slowDuration;
         }        
-        public void setStatus(String status){
-            this.status = status;
+        public void slow(int duration){ //slow how many duraiton
+            this.slowDuration = slowDuration + duration;
+            this.speed/=2;
         }        
     }
 
