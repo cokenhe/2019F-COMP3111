@@ -111,8 +111,8 @@ public class Monster implements Describable {
         @Override
         public String getDescription() {
             return String.format(
-                "HP:\t\t%dn" +
-                "Speed:\t\t%dn" + 
+                "HP:\t\t%d\n" +
+                "Speed:\t\t%d\n" + 
                 "Reward:\t$%d", 
                 getHP(), getSpeed(), getReward()
             );
