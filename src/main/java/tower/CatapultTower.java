@@ -90,6 +90,16 @@ import monster.Monster;
                 return null;
             }
         }
+
+        @Override
+        public String getDescription() {
+            return String.format(
+            "Attack Power: %d\n" +
+            "Attack Range: %d\n" +
+            "Cool Down: %d\n" +
+            "Upgrade Cost: %d",
+            getAttackPower(), getRange(), getCoolDownCounter(), getUpgradeCost());
+        }
     }
 
   

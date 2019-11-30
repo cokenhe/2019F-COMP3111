@@ -152,11 +152,7 @@ public class MyController {
 
         Helper.instance.showAlert("Upgrade Success", "Tower upgraded to level " + selectedTower.getLevel() + " successfully");
 
-        grids[selectedY][selectedX].setTooltip(new Tooltip(
-            "Attack Power:\t" + selectedTower.getAttackPower() + "\n" +
-            "Attack Range:\t" + selectedTower.getRange() + "\n" +
-            "Upgrade Cost:\t$" + selectedTower.getUpgradeCost()
-        ));
+        grids[selectedY][selectedX].setTooltip(new Tooltip(selectedTower.getDescription()));
     }
 
     @FXML 
@@ -252,7 +248,7 @@ public class MyController {
      * update the icon of living monster in the whole arena
      */
     private void iconUpdate(){
-        for(int i=0;i<number_of_monster;++i){
+        for (int i = 0; i < number_of_monster; ++i) {
             Label grid = monsters[i].getLocation().getGridLabel(grids);
 
             if(monsters[i].isAlive()){
@@ -264,8 +260,12 @@ public class MyController {
                 grid.setTooltip(new Tooltip(monsters[i].getDescription()));   
                 monsters[i].dead();
                 updateResources(monsters[i].getReward());
-            }       
-                            
+            }                     
+        }
+
+        for (int i = 0; i < number_of_tower; i++) {
+            Label grid = towers[i].getLocation().getGridLabel(grids);
+            grid.setTooltip(new Tooltip(towers[i].getDescription()));
         }
     }
 
@@ -292,8 +292,6 @@ public class MyController {
         int px = x * GameConfig.GRID_HEIGHT + 20;
         int py = y * GameConfig.GRID_WIDTH + 20;
 
-        String energyStatus = "";
-
         if (towerType.compareTo("basicTower") == 0) {
             cost = BasicTower.BUILDCOST;
             if (cost > moneyBalance) return false;
@@ -313,16 +311,10 @@ public class MyController {
             cost = LaserTower.BUILDCOST;
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new LaserTower(px, py);
-            energyStatus = "Energy: " + ((LaserTower) towers[number_of_tower - 1]).getEnergy() + "\n";
         }
         else return false;
 
-        grids[y][x].setTooltip(new Tooltip(
-            "Attack Power: " + towers[number_of_tower - 1].getAttackPower() + "\n" +
-            "Attack Range: " + towers[number_of_tower - 1].getRange() + "\n" +
-            energyStatus +
-            "Upgrade Cost: $" + towers[number_of_tower - 1].getUpgradeCost()
-        ));
+        grids[y][x].setTooltip(new Tooltip(towers[number_of_tower - 1].getDescription()));
         updateResources(-cost);
         return true;
     }
