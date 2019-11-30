@@ -76,7 +76,16 @@ import monster.Monster;
                 recharge();
                 return null;
             }
+        }
 
+        @Override
+        public String getDescription() {
+            return String.format(
+            "Attack Power: %d\n" +
+            "Attack Range: %d\n" +
+            "Energy: %d\n" +
+            "Upgrade Cost: %d",
+            getAttackPower(), getRange(), getEnergy(), getUpgradeCost());
         }
     }
 

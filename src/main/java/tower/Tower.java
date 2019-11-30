@@ -1,9 +1,10 @@
 package tower;
 
+import helper.Describable;
 import helper.Location;
 import monster.Monster;
 
-    abstract public class Tower {
+    abstract public class Tower implements Describable {
         
         protected int[] attackPower;
         protected int range;
@@ -85,6 +86,15 @@ import monster.Monster;
             Monster selectedMonster = findNearestMonster(monsters);
             if (selectedMonster != null)
                 selectedMonster.reduceHP(attackPower[level-1]);
+        }
+
+        @Override
+        public String getDescription() {
+            return String.format(
+            "Attack Power: %d\n" +
+            "Attack Range: %d\n" +
+            "Upgrade Cost: %d",
+            getAttackPower(), getRange(), getUpgradeCost());
         }
 
         /**
