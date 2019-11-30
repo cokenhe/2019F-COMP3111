@@ -256,28 +256,12 @@ public class MyController {
             Label grid = monsters[i].getLocation().getGridLabel(grids);
 
             if(monsters[i].isAlive()){
-                // grid.setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
-                grid.setGraphic(new ImageView(image));
-                grid.setMaxSize(40.0, 40.0);
-
-                grid.setTooltip(new Tooltip(
-                    "HP:\t\t" + monsters[i].getHP() + "\n" +
-                    "Speed:\t\t" + monsters[i].getSpeed() + "\n" + 
-                    "Reward:\t$" + monsters[i].getReward()
-                ));                      
+                Helper.instance.setGraphic(grid, monsters[i].getIcon());
+                grid.setTooltip(new Tooltip(monsters[i].getDescription()));                      
             }       
             if(monsters[i].isDying()&&!monsters[i].isAlive()){
-                // grid.setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
-                Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
-                grid.setGraphic(new ImageView(image));
-                grid.setMaxSize(40.0, 40.0);
-
-                grid.setTooltip(new Tooltip(
-                    "HP:\t\t" + monsters[i].getHP() + "\n" +
-                    "Speed:\t\t" + monsters[i].getSpeed() + "\n" + 
-                    "Reward:\t$" + monsters[i].getReward()
-                ));   
+                Helper.instance.setGraphic(grid, monsters[i].getIcon());
+                grid.setTooltip(new Tooltip(monsters[i].getDescription()));   
                 monsters[i].dead();
                 updateResources(monsters[i].getReward());
             }       
