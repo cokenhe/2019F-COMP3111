@@ -1,9 +1,10 @@
 package monster;
 
 import helper.Location;
+import helper.Describable;
 import helper.GameConfig;
 
-public class Monster {
+public class Monster implements Describable {
         
         protected int hp;
         protected int oriSpeed;
@@ -106,6 +107,16 @@ public class Monster {
             this.slowDuration = duration;
             this.speed/=2;
         }        
+
+        @Override
+        public String getDescription() {
+            return String.format(
+                "HP:\t\t%d\n" +
+                "Speed:\t\t%d\n" + 
+                "Reward:\t$%d", 
+                getHP(), getSpeed(), getReward()
+            );
+        }
     }
 
   
