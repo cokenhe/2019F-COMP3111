@@ -9,6 +9,8 @@ import helper.GameConfig;
  */
 public class Location extends Point {
 
+    private static final long serialVersionUID = 292230760372229957L;
+
     public Location(int x, int y) {
         super(x, y);
     }
@@ -57,7 +59,6 @@ public class Location extends Point {
 
         inRange = Math.abs(A * x + B * y + C) / Math.sqrt(A * A + 1) <= 3;
 
-        // System.out.println(String.format("inRange: %s\tinSameDirection: %s\t", inRange, inSameDirection));
         return inRange && inSameDirection;
     }
 
@@ -67,18 +68,31 @@ public class Location extends Point {
      * @return the Label in relative pixel coordinate
      */
     public Label getGridLabel(Label grids[][]) {
-        return grids[y / GameConfig.GRID_HEIGHT][x / GameConfig.GRID_WIDTH];
+        return grids[getGridY()][getGridX()];
     }
 
+    /**
+     * Convert pixel to grid coordinate
+     * @return x - coordinate
+     */
     public int getGridX() {
         return x / GameConfig.GRID_WIDTH;
     }
 
+    /**
+     * Convert pixel to grid coordinate
+     * @return y - coordinate
+     */
     public int getGridY() {
         return y / GameConfig.GRID_HEIGHT;
     }
 
-    public double getAngle(Point target) {
+    /**
+     * Get the angle between two points in SACT formate, with self as the centre point
+     * @param target target point
+     * @return degree from 0 to 359
+     */
+    private double getAngle(Point target) {
         double angle = Math.toDegrees(Math.atan2(target.y - y, target.x - x));
         if (angle < 0)
             angle += 360;

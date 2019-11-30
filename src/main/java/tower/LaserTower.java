@@ -18,7 +18,7 @@ import monster.Monster;
         public LaserTower(int x, int y){
             attackPower = new int[]{10, 12, 14, 14, 16};
             range = 150;
-            upgradeCost = new int[]{80, 100, 120, 130};     
+            upgradeCost = new int[]{80, 100, 120, 130, 0};     
             loc = new Location(x,y);
         }
 

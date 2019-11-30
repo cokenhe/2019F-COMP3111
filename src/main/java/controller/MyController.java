@@ -26,6 +26,7 @@ import monster.*;
 import tower.*;
 import helper.Location;
 import helper.GameConfig;
+import helper.Helper;
 
 public class MyController {
     @FXML
@@ -113,7 +114,7 @@ public class MyController {
                 grids[i][j] = newLabel;
                 paneArena.getChildren().addAll(newLabel);
             }
-        setStyle();
+        setUI();
         setDragAndDrop();
     }
 
@@ -135,22 +136,21 @@ public class MyController {
 
     @FXML 
     private void upgradeTower() {
+        if (selectedTower.getLevel() >= GameConfig.MAX_TOWER_LEVEL) {
+            Helper.instance.showAlert("Upgrade Fail", "Tower alreday at max level");
+            return;
+        }
+
         int money = Integer.parseInt(labelMoneyAmount.getText());
         if (money < selectedTower.getUpgradeCost()) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Not enough money");
-            alert.showAndWait().ifPresent((btnType) -> {});
+            Helper.instance.showAlert("Upgrade Fail", "Not enough money");
             return;
         }
         
         updateResources(-this.selectedTower.getUpgradeCost());
         this.selectedTower.upgrade();
 
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Infomation");
-        alert.setHeaderText("Tower upgrade successfully");
-        alert.showAndWait().ifPresent((btnType) -> {});
+        Helper.instance.showAlert("Upgrade Success", "Tower upgraded to level " + selectedTower.getLevel() + " successfully");
 
         grids[selectedY][selectedX].setTooltip(new Tooltip(
             "Attack Power:\t" + selectedTower.getAttackPower() + "\n" +
@@ -173,7 +173,7 @@ public class MyController {
                 
         grids[selectedY][selectedX].setGraphic(null);
         grids[selectedY][selectedX].setOnMouseClicked(null);
-        setHandler(selectedX, selectedY);
+        setDragDropHandler(selectedX, selectedY);
         cancelAction();
     }
 
@@ -185,7 +185,6 @@ public class MyController {
         toggleFireRange(false);
     }
 
-    @FXML
     private void generateMonster(){
         if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER ){ 
             switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
@@ -218,23 +217,19 @@ public class MyController {
     /**
      * clean the icon of monster in the whole arena
      */
-    @FXML
     private void cleanIcon(){
         for(int i=0;i<number_of_monster;++i){
             Location monster = monsters[i].getLocation();
-            int x = monster.getGridX();
-            int y = monster.getGridY();
+            Label grid = monster.getGridLabel(grids);
             
-            // grids[y][x].setStyle("-fx-background-image:none; -fx-border-color: black;");
-            grids[y][x].setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-            grids[y][x].setGraphic(null);
-            grids[y][x].setTooltip(null);
+            grid.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+            grid.setGraphic(null);
+            grid.setTooltip(null);
         }
     }
     /**
      * all monster still alive will call move() acoording to its'speed times, the icon will not change yet.
      */
-    @FXML
     private void moveMonster(){
         for(int i=0;i<number_of_monster;++i){
             if(monsters[i].isAlive()){
@@ -244,6 +239,9 @@ public class MyController {
         }
     }
 
+    /**
+     * All the tower shoot the closest monster
+     */
     private void fireAttack() {
         for (int i = 0; i < number_of_tower; i++) {
             towers[i].attack(monsters);
@@ -253,35 +251,32 @@ public class MyController {
     /**
      * update the icon of living monster in the whole arena
      */
-    @FXML
     private void iconUpdate(){
         for(int i=0;i<number_of_monster;++i){
-            Monster monster = monsters[i];
-            int x = monster.getLocation().getGridX();
-            int y = monster.getLocation().getGridY();
+            Label grid = monsters[i].getLocation().getGridLabel(grids);
 
             if(monsters[i].isAlive()){
-                // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                // grid.setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
                 Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
-                grids[y][x].setGraphic(new ImageView(image));
-                grids[y][x].setMaxSize(40.0, 40.0);
+                grid.setGraphic(new ImageView(image));
+                grid.setMaxSize(40.0, 40.0);
 
-                grids[y][x].setTooltip(new Tooltip(
-                    "HP:\t" + monsters[i].getHP() + "\n" +
-                    "Speed:\t" + monsters[i].getSpeed() + "\n" + 
-                    "Reward:\t" + monsters[i].getReward()
+                grid.setTooltip(new Tooltip(
+                    "HP:\t\t" + monsters[i].getHP() + "\n" +
+                    "Speed:\t\t" + monsters[i].getSpeed() + "\n" + 
+                    "Reward:\t$" + monsters[i].getReward()
                 ));                      
             }       
             if(monsters[i].isDying()&&!monsters[i].isAlive()){
-                // grids[y][x].setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
+                // grid.setStyle("-fx-background-image: url("+monsters[i].getIcon()+"); -fx-background-size:40px 40px;");
                 Image image = new Image(monsters[i].getIcon(), 40, 40, true, true);
-                grids[y][x].setGraphic(new ImageView(image));
-                grids[y][x].setMaxSize(40.0, 40.0);
+                grid.setGraphic(new ImageView(image));
+                grid.setMaxSize(40.0, 40.0);
 
-                grids[y][x].setTooltip(new Tooltip(
-                    "HP:\t" + monsters[i].getHP() + "\n" +
-                    "Speed:\t" + monsters[i].getSpeed() + "\n" + 
-                    "Reward:\t" + monsters[i].getReward()
+                grid.setTooltip(new Tooltip(
+                    "HP:\t\t" + monsters[i].getHP() + "\n" +
+                    "Speed:\t\t" + monsters[i].getSpeed() + "\n" + 
+                    "Reward:\t$" + monsters[i].getReward()
                 ));   
                 monsters[i].dead();
                 updateResources(monsters[i].getReward());
@@ -290,17 +285,30 @@ public class MyController {
         }
     }
 
+    /**
+     * Adjust the resources value
+     * @param money the value add / minor to money
+     */
     private void updateResources(int money) {
         int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
         moneyBalance += money;
         labelMoneyAmount.setText(Integer.toString(moneyBalance));
     }
 
+    /**
+     * Construct a tower at grids[y][x]
+     * @param towerType the tower type: basicTower | catapult | iceTower | laserTower
+     * @param x x coordinate
+     * @param y y corrdinate
+     * @return true - construct success, false - cnstruct fail
+     */
     private boolean constructTower(String towerType, int x, int y) {
         int moneyBalance = Integer.parseInt(labelMoneyAmount.getText());
         int cost = 0;
         int px = x * GameConfig.GRID_HEIGHT + 20;
         int py = y * GameConfig.GRID_WIDTH + 20;
+
+        String energyStatus = "";
 
         if (towerType.compareTo("basicTower") == 0) {
             cost = BasicTower.BUILDCOST;
@@ -321,12 +329,14 @@ public class MyController {
             cost = LaserTower.BUILDCOST;
             if (cost > moneyBalance) return false;
             towers[number_of_tower++] = new LaserTower(px, py);
+            energyStatus = "Energy: " + ((LaserTower) towers[number_of_tower - 1]).getEnergy() + "\n";
         }
         else return false;
 
         grids[y][x].setTooltip(new Tooltip(
             "Attack Power: " + towers[number_of_tower - 1].getAttackPower() + "\n" +
             "Attack Range: " + towers[number_of_tower - 1].getRange() + "\n" +
+            energyStatus +
             "Upgrade Cost: $" + towers[number_of_tower - 1].getUpgradeCost()
         ));
         updateResources(-cost);
@@ -350,7 +360,9 @@ public class MyController {
         }
     }
 
-
+    /**
+     * Look for the corresponding tower at grids[y][x]
+     */
     public void searchTower() {
         for (int i = 0; i < number_of_tower; i++) {
             int x = towers[i].getLocation().getGridX();
@@ -363,9 +375,13 @@ public class MyController {
         }
     }
 
+    /**
+     * Turn the grids that inside attack range into HINT COLOR
+     * @param shouldOn true - ON , false - OFF
+     */
     public void toggleFireRange(boolean shouldOn) {
-        Color toColor = shouldOn ? Color.YELLOW : Color.WHITE;
-        Color fromColor = shouldOn ? Color.WHITE : Color.YELLOW;
+        Color toColor = shouldOn ? GameConfig.HINT_COLOR : Color.WHITE;
+        Color fromColor = shouldOn ? Color.WHITE : GameConfig.HINT_COLOR;
 
         for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
             for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) {
@@ -374,21 +390,41 @@ public class MyController {
                     && target.getBackground() != null 
                     && target.getBackground().getFills().size() > 0 
                     && target.getBackground().getFills().get(0).getFill() == fromColor) 
-                    if (selectedTower.isInRange(new Location(i * GameConfig.GRID_HEIGHT + 20, j * GameConfig.GRID_WIDTH + 20))) {
+                    if (selectedTower.isInRange(new Location(j * GameConfig.GRID_HEIGHT + 20, i * GameConfig.GRID_WIDTH + 20))) 
                         target.setBackground(new Background(new BackgroundFill(toColor, CornerRadii.EMPTY, Insets.EMPTY)));
-
-                        System.out.println(String.format("\nTower: (%d, %d) -> (%d, %d)\ttarget: (%d, %d)", selectedTower.getLocation().x, selectedTower.getLocation().y, selectedTower.getLocation().getGridX(), selectedTower.getLocation().getGridY(), j, i));
-                    }
             }
     }
 
     /**
      * Setup the styles of UI elements
      */
-    private void setStyle() {
+    private void setUI() {
+        labelMoneyAmount.setText(Integer.toString(GameConfig.INITIAL_MONEY_BALANCE));
         labelMoneyAmount.setTextFill(Color.ORANGE);
         buttonDestroy.setDisable(true);
         buttonUpgrade.setDisable(true);
+
+        labelBasicTower.setTooltip(new Tooltip(
+            "Basic Tower\n" +
+            "A normal tower\n" +
+            "Price: $" + BasicTower.BUILDCOST));
+        labelIceTower.setTooltip(new Tooltip(
+            "Ice Tower\n" +
+            "Tower with lower attack power\n" +
+            "but able to slow down monster speed\n" +
+            "Price: $" + IceTower.BUILDCOST));
+        labelCatapult.setTooltip(new Tooltip(
+            "Catapult Tower\n" +
+            "Tower can attack all the monsters in\n" +
+            "the same grid, unable to attack close monster\n" +
+            "Price: $" + CatapultTower.BUILDCOST));
+        labelLaserTower.setTooltip(new Tooltip(
+            "Laser Tower\n" +
+            "Tower with unlimited attack range\n" + 
+            "able to attack all the monsters on the path\n" +
+            "need to consume energy\n" +
+            "(auto-recharge when out of energy)\n" +
+            "Price: $" + LaserTower.BUILDCOST));
     }
 
     /**
@@ -402,10 +438,15 @@ public class MyController {
 
         for (int i = 0; i < GameConfig.MAX_V_NUM_GRID; i++)
             for (int j = 0; j < GameConfig.MAX_H_NUM_GRID; j++) 
-                setHandler(j, i);
+                setDragDropHandler(j, i);
     }
 
-    private void setHandler(int x, int y) {
+    /**
+     * Set drag and drop event handler to grids[y][x]
+     * @param x x coordinate
+     * @param y y coordinate
+     */
+    private void setDragDropHandler(int x, int y) {
         Label target = grids[y][x];
         if (target.getBackground().getFills().get(0).getFill() == Color.WHITE) return;
 
@@ -461,10 +502,8 @@ public class MyController {
                 int y = Integer.parseInt(targetLocation.split(",")[0]);
                 int x = Integer.parseInt(targetLocation.split(",")[1]);
                 if (!constructTower(db.getString(), x, y)) {
-                    Alert alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Warning");
-                    alert.setHeaderText("Not enough money");
-                    alert.showAndWait().ifPresent((btnType) -> {});
+                    Helper.instance.showAlert("Construct Tower Fail", "Not Enough Money");
+
                     event.consume();
                     return;
                 }
@@ -494,6 +533,8 @@ public class MyController {
 
         @Override
         public void handle(MouseEvent event) {
+            cancelAction();
+
             Label target = (Label) event.getTarget();
             String targetLocation = target.getId();
             selectedY = Integer.parseInt(targetLocation.split(",")[0]);

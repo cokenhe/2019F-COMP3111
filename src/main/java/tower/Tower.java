@@ -40,6 +40,10 @@ import monster.Monster;
             return loc;
         }
 
+        public int getLevel() {
+            return level;
+        }
+
         /**
          * Find the Monster nearest to End-Zone in attack range
          * @param monsters Array of the monster in Arena

@@ -16,7 +16,7 @@ public class IceTower extends Tower{
     public IceTower(int x, int y){
         attackPower = new int[]{1, 1, 2, 2, 3};
         range = 65;
-        upgradeCost = new int[]{20, 20, 30 ,30};   
+        upgradeCost = new int[]{20, 20, 30 ,30, 0};   
         loc = new Location(x,y);
     }
 
@@ -49,7 +49,6 @@ public class IceTower extends Tower{
     @Override
     public boolean isInRange(Location monsterLoc) {
         double distance = Math.sqrt((loc.x - monsterLoc.x) * (loc.x - monsterLoc.x) + (loc.y - monsterLoc.y) * (loc.y - monsterLoc.y));
-        System.out.println(distance);
         return (distance <= range);
     }
 
