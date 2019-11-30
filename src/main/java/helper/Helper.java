@@ -17,7 +17,8 @@ public class Helper {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(content);
-        alert.showAndWait().ifPresent((btnType) -> {});
+        alert.showAndWait().ifPresent((btnType) -> {
+        });
     }
 
     public void setGraphic(Label grid, String url) {

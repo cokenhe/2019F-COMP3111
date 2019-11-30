@@ -328,8 +328,7 @@ public class MyController {
             if(monsters[i].isReachEndZone()){
                 endGameDialog.setTitle("The game is over");
                 endGameDialog.setHeaderText("A monster reached the end-zone");
-                endGameDialog.showAndWait().ifPresent((btnType) -> {
-                });
+                endGameDialog.showAndWait().ifPresent((btnType) -> {});
                 isGameEnd = true;
                 System.out.println("Gameover");
             }       
@@ -479,7 +478,6 @@ public class MyController {
                 int x = Integer.parseInt(targetLocation.split(",")[1]);
                 if (!constructTower(db.getString(), x, y)) {
                     Helper.instance.showAlert("Construct Tower Fail", "Not Enough Money");
-
                     event.consume();
                     return;
                 }
@@ -489,7 +487,6 @@ public class MyController {
                 target.setMaxSize(40.0, 40.0);
                 target.setStyle("-fx-border-color: black;");
 
-                // REMARK: should change to click event, for upgrade tower / destroy
                 target.setOnDragDropped(null);
                 target.setOnDragEntered(null);
                 target.setOnDragOver(null);

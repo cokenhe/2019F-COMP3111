@@ -1,10 +1,12 @@
-import org.junit.Assert;
 import org.junit.Test;
 
-import controller.*;
-import monster.*;
-import tower.*;
-import helper.*;
+import monster.Fox;
+import monster.Monster;
+import tower.BasicTower;
+import tower.CatapultTower;
+import tower.IceTower;
+import tower.LaserTower;
+import tower.Tower;
 
 
 public class TowerTesting {

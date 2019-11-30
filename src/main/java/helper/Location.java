@@ -21,7 +21,8 @@ public class Location extends Point {
 
     /**
      * determine if this point is covered by the laser
-     * @param tower location of tower
+     * 
+     * @param tower   location of tower
      * @param monster location of monster
      * @return true - in range, false - out of range
      */
@@ -30,14 +31,12 @@ public class Location extends Point {
         double A, B, C;
 
         if (tower.x == monster.x) { // verticle line, slope = 0
-            inSameDirection = (tower.y > monster.y && tower.y > y)
-                            || (tower.y < monster.y && tower.y < y);
+            inSameDirection = (tower.y > monster.y && tower.y > y) || (tower.y < monster.y && tower.y < y);
             A = 1;
             B = 0;
             C = tower.x;
         } else if (tower.y == monster.y) { // horizontal line, slope = infinity
-            inSameDirection = (tower.x > monster.x && tower.x > x)
-                            || (tower.x < monster.x && tower.x < x);
+            inSameDirection = (tower.x > monster.x && tower.x > x) || (tower.x < monster.x && tower.x < x);
             A = 0;
             B = 1;
             C = tower.y;
@@ -50,11 +49,11 @@ public class Location extends Point {
             double m, c;
             m = -1 / A;
             c = tower.y - tower.x * m;
-            
+
             double degree = tower.getAngle(monster);
-            
-            inSameDirection = (((degree >= 0 && degree <= 90) || (degree > 270 && degree <= 360)) && ((m * x - y + c) * m > 0)) 
-                        || (degree > 90 && degree <= 270 && ((m * x - y + c) * m < 0));
+
+            inSameDirection = (((degree >= 0 && degree <= 90) || (degree > 270 && degree <= 360))
+                    && ((m * x - y + c) * m > 0)) || (degree > 90 && degree <= 270 && ((m * x - y + c) * m < 0));
         }
 
         inRange = Math.abs(A * x + B * y + C) / Math.sqrt(A * A + 1) <= 3;
@@ -64,6 +63,7 @@ public class Location extends Point {
 
     /**
      * Convert pixel coordinate to grid label
+     * 
      * @param grids the Label grids[][]
      * @return the Label in relative pixel coordinate
      */
@@ -73,6 +73,7 @@ public class Location extends Point {
 
     /**
      * Convert pixel to grid coordinate
+     * 
      * @return x - coordinate
      */
     public int getGridX() {
@@ -81,6 +82,7 @@ public class Location extends Point {
 
     /**
      * Convert pixel to grid coordinate
+     * 
      * @return y - coordinate
      */
     public int getGridY() {
@@ -88,7 +90,9 @@ public class Location extends Point {
     }
 
     /**
-     * Get the angle between two points in SACT formate, with self as the centre point
+     * Get the angle between two points in SACT formate, with self as the centre
+     * point
+     * 
      * @param target target point
      * @return degree from 0 to 359
      */

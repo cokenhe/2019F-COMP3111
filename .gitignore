@@ -7,5 +7,7 @@ build/**
 out/
 out/**
 
+.vscode/**
+
 ./courseScraper-0.1.0.jar
 courseScraper-0.1.0.jar
