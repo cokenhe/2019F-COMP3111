@@ -135,7 +135,9 @@ public class MyController {
         else
             endGameDialog.showAndWait().ifPresent((btnType) -> {});    //show dialog to say game over   
     }
-
+    /**
+     * call to upgrade a tower
+     */
     @FXML 
     private void upgradeTower() {
         if (selectedTower.getLevel() >= GameConfig.MAX_TOWER_LEVEL) {
@@ -156,7 +158,9 @@ public class MyController {
 
         grids[selectedY][selectedX].setTooltip(new Tooltip(selectedTower.getDescription()));
     }
-
+    /**
+     * call to destory a tower
+     */
     @FXML 
     private void destroyTower() {
         boolean found = false;
@@ -174,7 +178,9 @@ public class MyController {
         setDragDropHandler(selectedX, selectedY);
         cancelAction();
     }
-
+    /**
+     * 
+     */
     @FXML
     private void cancelAction() {
         buttonUpgrade.setDisable(true);
@@ -449,7 +455,9 @@ public class MyController {
         });
     }
 
-
+    /**
+     * handle drag event
+     */
     class DragEventHandler implements EventHandler<MouseEvent> {
         private Label source;
         public DragEventHandler(Label e) {
@@ -467,7 +475,9 @@ public class MyController {
             event.consume();
         }
     }
-
+    /**
+     * handle drag and drop event
+     */
     class DragDroppedEventHandler implements EventHandler<DragEvent> {
         @Override
         public void handle(DragEvent event) {
@@ -505,7 +515,9 @@ public class MyController {
 
         }
     }
-
+    /**
+     * handle clicked event
+     */
     class ClickedEventHandler implements EventHandler<MouseEvent> {
 
         @Override

@@ -30,7 +30,9 @@ public class Monster implements Describable {
         Direction(int i) {
             this.value = i;
         }
-
+        /**
+        * @return direction value
+        */
         public int getValue() {
             return this.value;
         }
