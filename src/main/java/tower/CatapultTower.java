@@ -3,6 +3,9 @@ package tower;
 import helper.Location;
 import monster.Monster;
 
+/**
+ * CatapultTower attack multiple monster on same grid
+ */
 public class CatapultTower extends Tower {
 
     public static final int BUILDCOST = 150;

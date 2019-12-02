@@ -3,6 +3,9 @@ package tower;
 import helper.Location;
 import monster.Monster;
 
+/**
+ * IceTower Slow the monster
+ */
 public class IceTower extends Tower {
 
     public static final int BUILDCOST = 60;

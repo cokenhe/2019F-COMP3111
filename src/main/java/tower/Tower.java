@@ -4,6 +4,9 @@ import helper.Describable;
 import helper.Location;
 import monster.Monster;
 
+/**
+ * Basic class of All Tower
+ */
 abstract public class Tower implements Describable {
 
     protected int[] attackPower;

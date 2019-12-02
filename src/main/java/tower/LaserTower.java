@@ -2,7 +2,9 @@ package tower;
 
 import helper.Location;
 import monster.Monster;
-
+/**
+ * LaserTower Can shoot a straight 3px laser alone the arena
+ */
 public class LaserTower extends Tower {
 
     public static final int BUILDCOST = 200;

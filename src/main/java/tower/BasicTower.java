@@ -2,6 +2,9 @@ package tower;
 
 import helper.Location;
 
+/**
+ * BasicTower shoot monster in 65px
+ */
 public class BasicTower extends Tower {
 
     public static final int BUILDCOST = 50;
