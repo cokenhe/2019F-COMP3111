@@ -116,7 +116,9 @@ public class MyController {
         setUI();
         setDragAndDrop();
     }
-
+    /**
+     * A function that called every frame, to check end game or not and control perform the generation and movement of monster
+     */
     @FXML
     private void nextFrame() {
         deselectTower();               // de-select tower
@@ -132,7 +134,9 @@ public class MyController {
         else
             endGameDialog.showAndWait().ifPresent((btnType) -> {});    //show dialog to say game over   
     }
-
+    /**
+     * call to upgrade a tower
+     */
     @FXML 
     private void upgradeTower() {
         if (selectedTower.getLevel() >= GameConfig.MAX_TOWER_LEVEL) {
@@ -153,7 +157,9 @@ public class MyController {
 
         grids[selectedY][selectedX].setTooltip(new Tooltip(selectedTower.getDescription()));
     }
-
+    /**
+     * call to destory a tower
+     */
     @FXML 
     private void destroyTower() {
         boolean found = false;
@@ -182,7 +188,9 @@ public class MyController {
         grids[selectedY][selectedX].setStyle("-fx-border-color: black;");
         toggleFireRange(false);
     }
-
+    /**
+     * A function that generate monster randomly
+     */
     private void generateMonster(){
         if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER ){ 
             switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){
@@ -447,7 +455,9 @@ public class MyController {
         });
     }
 
-
+    /**
+     * handle drag event
+     */
     class DragEventHandler implements EventHandler<MouseEvent> {
         private Label source;
         public DragEventHandler(Label e) {
@@ -465,7 +475,9 @@ public class MyController {
             event.consume();
         }
     }
-
+    /**
+     * handle drag and drop event
+     */
     class DragDroppedEventHandler implements EventHandler<DragEvent> {
         @Override
         public void handle(DragEvent event) {
@@ -501,7 +513,9 @@ public class MyController {
 
         }
     }
-
+    /**
+     * handle clicked event
+     */
     class ClickedEventHandler implements EventHandler<MouseEvent> {
 
         @Override
