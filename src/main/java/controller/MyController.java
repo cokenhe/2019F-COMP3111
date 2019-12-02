@@ -117,7 +117,9 @@ public class MyController {
         setUI();
         setDragAndDrop();
     }
-
+    /**
+     * A function that called every frame, to check end game or not and control perform the generation and movement of monster
+     */
     @FXML
     private void nextFrame() {
         cancelAction();               // de-select tower
@@ -180,7 +182,9 @@ public class MyController {
         grids[selectedY][selectedX].setStyle("-fx-border-color: black;");
         toggleFireRange(false);
     }
-
+    /**
+     * A function that generate monster randomly
+     */
     private void generateMonster(){
         if(number_of_frame++ % 3 == 0 && number_of_monster<= GameConfig.MAX_MONSTER_NUMBER ){ 
             switch(rand.nextInt(GameConfig.NO_OF_MONSTER_TYPE)){

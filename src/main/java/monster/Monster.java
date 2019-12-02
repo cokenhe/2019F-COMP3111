@@ -18,6 +18,10 @@ public class Monster implements Describable {
     protected boolean reachEndZone;
     protected int slowDuration;
 
+    /**
+     * direction of the monster going
+     * DOWNWARD OR UPWARD
+     */
     protected enum Direction {
         DOWNWARD(1), UPWARD(-1);
 
@@ -33,7 +37,10 @@ public class Monster implements Describable {
     }
 
     protected Direction dir = Direction.DOWNWARD;
-
+    /**
+     * Construtor of Monster
+     * 
+     */
     Monster() {
         location = new Location(20, 20);
         dir = Direction.DOWNWARD;
@@ -46,7 +53,10 @@ public class Monster implements Describable {
         icon = "";
         slowDuration = 0;
     }
-
+    /**
+     * move function of Monster, let monster move 1 grid forward
+     * 
+     */
     public void move() {
         // still under slow?
         if (slowDuration > 0) // slow period end, recover
@@ -73,11 +83,17 @@ public class Monster implements Describable {
         // Moving up / down
         location.y += dir.getValue() * GameConfig.GRID_HEIGHT;
     }
-
+    /**
+     * @return hp of monster
+     * 
+     */
     public int getHP() {
         return this.hp;
     }
-
+    /**
+     * @param dam the hp that going to deduce
+     * 
+     */
     public void reduceHP(int dam) {
         this.hp = this.hp - dam;
         if (this.hp < 1) {
@@ -88,51 +104,78 @@ public class Monster implements Describable {
         }
 
     }
-
+    /**
+     * @return dying
+     * 
+     */
     public boolean isDying() {
         return this.dying;
     }
-
+    /**
+     * set dying to false
+     */
     public void dead() {
         this.dying = false;
     }
-
+    /**
+     * @return speed
+     */
     public int getSpeed() {
         if (slowDuration > 0)
             return this.speed / 2;
         else
             return this.speed;
     }
-
+    /**
+     * @return alive
+     * 
+     */
     public boolean isAlive() {
         return this.alive;
     }
-
+    /**
+     * @return icon
+     * 
+     */
     public String getIcon() {
         return this.icon;
     }
-
+    /**
+     * @return location
+     * 
+     */
     public Location getLocation() {
         return this.location;
     }
-
+    /**
+     * @return reward
+     * 
+     */
     public int getReward() {
         return this.reward;
     }
-
+    /**
+     * @return reachEndZone
+     */
     public boolean isReachEndZone() {
         return this.reachEndZone;
     }
-
+    /**
+     * @return slowDuration
+     */
     public int getslowDuration() {
         return this.slowDuration;
     }
-
-    public void slow(int duration) { // slow how many duraiton
+    /**
+     * @param duration the duraiton of slow 
+     */
+    public void slow(int duration) { 
         this.slowDuration = duration;
         this.speed /= 2;
     }
-
+    /**
+     * @return the  descrption of monster that form by it's attribute 
+     */
     @Override
     public String getDescription() {
         return String.format("HP:\t\t%d\n" + "Speed:\t\t%d\n" + "Reward:\t$%d", getHP(), getSpeed(), getReward());
