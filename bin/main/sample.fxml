@@ -29,7 +29,7 @@
 
                   <Button fx:id="buttonUpgrade" layoutX="4.0" layoutY="160.0" minWidth="40.0" mnemonicParsing="false" onAction="#upgradeTower" text="Upgrade" />
                   <Button fx:id="buttonDestroy" layoutX="4.0" layoutY="190.0" minWidth="40.0" mnemonicParsing="false" onAction="#destroyTower" text="Destroy" />
-                  <Button fx:id="buttonCancel" layoutX="4.0" layoutY="220.0" minWidth="40.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+                  <Button fx:id="buttonCancel" layoutX="4.0" layoutY="220.0" minWidth="40.0" mnemonicParsing="false" onAction="#deselectTower" text="Cancel" />
 
                   <Label fx:id="labelBasicTower" layoutX="17.0" layoutY="260.0" minWidth="40.0" minHeight="40.0" id="basicTower" style="-fx-background-image:url('basicTower.png');-fx-background-size:40px 40px;-fx-border-color: black;">
                      <opaqueInsets>

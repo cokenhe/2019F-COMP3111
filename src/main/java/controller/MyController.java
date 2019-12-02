@@ -16,7 +16,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 // MARK: java 
 import java.util.Random;
@@ -120,7 +119,7 @@ public class MyController {
 
     @FXML
     private void nextFrame() {
-        cancelAction();               // de-select tower
+        deselectTower();               // de-select tower
         if(!isGameEnd){               // the game still not end
             updateResources(150 + number_of_frame * 30);       // give money to player every frame     
             cleanIcon();              // clear all monster's icon
@@ -170,11 +169,14 @@ public class MyController {
         grids[selectedY][selectedX].setGraphic(null);
         grids[selectedY][selectedX].setOnMouseClicked(null);
         setDragDropHandler(selectedX, selectedY);
-        cancelAction();
+        deselectTower();
     }
 
+    /**
+     * De-select a tower
+     */
     @FXML
-    private void cancelAction() {
+    private void deselectTower() {
         buttonUpgrade.setDisable(true);
         buttonDestroy.setDisable(true);
         grids[selectedY][selectedX].setStyle("-fx-border-color: black;");
@@ -482,9 +484,7 @@ public class MyController {
                     return;
                 }
 
-                Image image = new Image(db.getString() + ".png", 40, 40, true, true);
-                target.setGraphic(new ImageView(image));
-                target.setMaxSize(40.0, 40.0);
+                Helper.instance.setGraphic(target, db.getString() + ".png");
                 target.setStyle("-fx-border-color: black;");
 
                 target.setOnDragDropped(null);
@@ -506,7 +506,7 @@ public class MyController {
 
         @Override
         public void handle(MouseEvent event) {
-            cancelAction();
+            deselectTower();
 
             Label target = (Label) event.getTarget();
             String targetLocation = target.getId();
